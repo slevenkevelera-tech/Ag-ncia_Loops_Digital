@@ -1,0 +1,70 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "User profile authenticated via Google Firebase Auth",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "maxLength": 128 },
+        "email": { "type": "string", "maxLength": 256 },
+        "displayName": { "type": "string", "maxLength": 128 },
+        "photoURL": { "type": "string", "maxLength": 1024 },
+        "role": { "type": "string", "enum": ["admin", "client", "visitor"] },
+        "createdAt": { "type": "string", "maxLength": 64 }
+      },
+      "required": ["uid", "email", "role"]
+    },
+    "Lead": {
+      "title": "Lead",
+      "description": "Inbound CRM lead received from social media or web forms",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "name": { "type": "string", "maxLength": 128 },
+        "company": { "type": "string", "maxLength": 128 },
+        "email": { "type": "string", "maxLength": 256 },
+        "phone": { "type": "string", "maxLength": 64 },
+        "channel": { "type": "string", "enum": ["instagram", "whatsapp", "linkedin", "x", "web"] },
+        "channelHandle": { "type": "string", "maxLength": 128 },
+        "status": { "type": "string", "enum": ["novo", "qualificado", "negociacao", "proposta", "fechado"] },
+        "leadScore": { "type": "number" },
+        "budgetTier": { "type": "string", "maxLength": 128 },
+        "intent": { "type": "string", "maxLength": 512 },
+        "lastMessage": { "type": "string", "maxLength": 2048 },
+        "aiAgentResponse": { "type": "string", "maxLength": 2048 },
+        "createdAt": { "type": "string", "maxLength": 64 },
+        "tags": { "type": "array" }
+      },
+      "required": ["name", "channel", "status", "lastMessage"]
+    },
+    "ChatSession": {
+      "title": "ChatSession",
+      "description": "Multi-turn Gemini chatbot session with role instruction",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "userId": { "type": "string", "maxLength": 128 },
+        "title": { "type": "string", "maxLength": 128 },
+        "model": { "type": "string", "maxLength": 64 },
+        "messages": { "type": "array" },
+        "createdAt": { "type": "string", "maxLength": 64 },
+        "updatedAt": { "type": "string", "maxLength": 64 }
+      },
+      "required": ["id", "model", "messages"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": { "$ref": "#/entities/User" },
+      "description": "User profile store for authenticated members"
+    },
+    "/leads/{leadId}": {
+      "schema": { "$ref": "#/entities/Lead" },
+      "description": "CRM leads collection with real-time updates"
+    },
+    "/chat_conversations/{conversationId}": {
+      "schema": { "$ref": "#/entities/ChatSession" },
+      "description": "Multi-turn chatbot chat histories"
+    }
+  }
+}
