@@ -5,6 +5,12 @@ import { createServer as createViteServer } from 'vite';
 import { GoogleGenAI, Modality } from '@google/genai';
 import dotenv from 'dotenv';
 import path from 'path';
+import {
+  streamCodeGeneration,
+  streamExplainCode,
+  streamOptimizeCode,
+  streamDebugCode,
+} from './src/services/codexService';
 
 dotenv.config();
 
@@ -29,16 +35,23 @@ const ai = process.env.GEMINI_API_KEY
 
 // Live API WebSocket for Real-time Voice Conversations (gemini-3.8-live)
 const wss = new WebSocketServer({ noServer: true });
+const codexWss = new WebSocketServer({ noServer: true });
 
 server.on('upgrade', (request, socket, head) => {
   const pathname = new URL(request.url || '', `http://${request.headers.host}`).pathname;
+  
   if (pathname === '/live') {
     wss.handleUpgrade(request, socket, head, (ws) => {
       wss.emit('connection', ws, request);
     });
+  } else if (pathname === '/codex-stream') {
+    codexWss.handleUpgrade(request, socket, head, (ws) => {
+      codexWss.emit('connection', ws, request);
+    });
   }
 });
 
+// Gemini Live API WebSocket handler
 wss.on('connection', async (clientWs) => {
   if (!ai) {
     clientWs.send(JSON.stringify({ error: 'Gemini API key is not configured.' }));
@@ -55,7 +68,7 @@ wss.on('connection', async (clientWs) => {
           voiceConfig: { prebuiltVoiceConfig: { voiceName: 'Zephyr' } },
         },
         systemInstruction:
-          'Você é o Agente de Voz Executivo e Consultor Técnico da agência futurista Loops Digital. Fale em português de forma clara, confiante e executiva. Apresente os serviços de Inteligência Artificial, Automação, Agentes de IA, CRM Omnichannel, Tráfego Pago e o projeto oficial da COP 30.',
+          'Você é o Agente de Voz Executivo e Consultor Técnico da agência futurista Loops Digital. Fale em português de forma clara, confiante e executiva. Apresente os serviços de Intelig[...]',
       },
       callbacks: {
         onmessage: (message: any) => {
@@ -102,6 +115,117 @@ wss.on('connection', async (clientWs) => {
   }
 });
 
+// OpenAI Codex Streaming WebSocket handler
+codexWss.on('connection', async (clientWs) => {
+  if (!process.env.OPENAI_API_KEY) {
+    clientWs.send(JSON.stringify({ error: 'OpenAI API key is not configured.' }));
+    clientWs.close();
+    return;
+  }
+
+  clientWs.on('message', async (data) => {
+    try {
+      const parsed = JSON.parse(data.toString());
+      const { action, prompt, code, language, error: errorMsg } = parsed;
+
+      if (!action) {
+        clientWs.send(JSON.stringify({ error: 'Action is required' }));
+        return;
+      }
+
+      try {
+        let generator;
+
+        switch (action) {
+          case 'generate':
+            if (!prompt) {
+              clientWs.send(JSON.stringify({ error: 'Prompt is required for generate action' }));
+              return;
+            }
+            generator = streamCodeGeneration({
+              prompt,
+              maxTokens: 2048,
+              temperature: 0.7,
+            });
+            break;
+
+          case 'explain':
+            if (!code) {
+              clientWs.send(JSON.stringify({ error: 'Code is required for explain action' }));
+              return;
+            }
+            generator = streamExplainCode({ code, language });
+            break;
+
+          case 'optimize':
+            if (!code) {
+              clientWs.send(JSON.stringify({ error: 'Code is required for optimize action' }));
+              return;
+            }
+            generator = streamOptimizeCode({ code, language });
+            break;
+
+          case 'debug':
+            if (!code) {
+              clientWs.send(JSON.stringify({ error: 'Code is required for debug action' }));
+              return;
+            }
+            generator = streamDebugCode(code, errorMsg);
+            break;
+
+          default:
+            clientWs.send(JSON.stringify({ error: `Unknown action: ${action}` }));
+            return;
+        }
+
+        // Stream chunks back to client
+        for await (const chunk of generator) {
+          if (clientWs.readyState === clientWs.OPEN) {
+            clientWs.send(
+              JSON.stringify({
+                type: 'chunk',
+                content: chunk,
+              })
+            );
+          }
+        }
+
+        // Send completion signal
+        if (clientWs.readyState === clientWs.OPEN) {
+          clientWs.send(
+            JSON.stringify({
+              type: 'complete',
+            })
+          );
+        }
+      } catch (streamErr: any) {
+        console.error('Stream error:', streamErr);
+        if (clientWs.readyState === clientWs.OPEN) {
+          clientWs.send(
+            JSON.stringify({
+              error: 'Stream processing failed',
+              details: streamErr?.message,
+            })
+          );
+        }
+      }
+    } catch (err: any) {
+      console.error('Error handling codex message:', err);
+      if (clientWs.readyState === clientWs.OPEN) {
+        clientWs.send(JSON.stringify({ error: 'Message parsing failed' }));
+      }
+    }
+  });
+
+  clientWs.on('close', () => {
+    console.log('Codex WebSocket connection closed');
+  });
+
+  clientWs.on('error', (err) => {
+    console.error('Codex WebSocket error:', err);
+  });
+});
+
 // Curated tech news fallback database (always updated with real 2026/current high-impact facts)
 const curatedTechNews = [
   {
@@ -110,7 +234,7 @@ const curatedTechNews = [
     category: 'Sustentabilidade & IA',
     source: 'Tech Climate Global',
     timestamp: 'Há 18 min',
-    summary: 'Infraestruturas de alta disponibilidade e modelos de machine learning integrados a sensores IoT em tempo real estabelecem novo padrão de transparência climática durante a cúpula em Belém.',
+    summary: 'Infraestruturas de alta disponibilidade e modelos de machine learning integrados a sensores IoT em tempo real estabelecem novo padrão de transparência climática durante a cúpula[...]',
     url: '#cop30',
     impact: 'Alta Relevância',
     metrics: '+42% precisão em emissões em tempo real'
@@ -121,7 +245,7 @@ const curatedTechNews = [
     category: 'Inteligência Artificial',
     source: 'VentureBeat / Enterprise AI',
     timestamp: 'Há 42 min',
-    summary: 'Empresas que integraram pipelines de agentes de IA diretamente a canais como Instagram Direct e WhatsApp Business registram salto médio de 310% na taxa de conversão de leads frios.',
+    summary: 'Empresas que integraram pipelines de agentes de IA diretamente a canais como Instagram Direct e WhatsApp Business registram salto médio de 310% na taxa de conversão de leads frios[...]',
     url: '#ai-agents',
     impact: 'Revolução Comercial',
     metrics: '8.4s tempo de resposta · 94% retenção'
@@ -176,7 +300,7 @@ let leadsStore = [
     budgetTier: 'R$ 25.000 - R$ 50.000/mês',
     intent: 'Criar Agentes de IA no Instagram + Tráfego Pago de Alta Performance',
     lastMessage: 'Preciso automatizar o agendamento de consultas pelo direct e escalar minhas campanhas no Google Ads.',
-    aiAgentResponse: 'Olá Dra. Camila! Na Loops Digital estruturamos agentes inteligentes conectados ao seu CRM que qualificam o paciente e já integram a agenda médica em tempo real. Vamos agendar um diagnóstico técnico?',
+    aiAgentResponse: 'Olá Dra. Camila! Na Loops Digital estruturamos agentes inteligentes conectados ao seu CRM que qualificam o paciente e já integram a agenda médica em tempo real. Vamos age[...]',
     createdAt: '2026-09-30T16:20:00Z',
     tags: ['Medicina', 'Alta Renda', 'Agente IA', 'Meta Ads']
   },
@@ -193,7 +317,7 @@ let leadsStore = [
     budgetTier: 'R$ 80.000 - R$ 150.000',
     intent: 'Sistema Web & Mobile de Telemetria com inspiração no projeto COP 30',
     lastMessage: 'Acompanhei a telemetria desenvolvida para a COP 30 e queremos uma solução de rastreio de frotas e créditos de carbono para a nossa transportadora.',
-    aiAgentResponse: 'Perfeito Rodrigo! O núcleo de arquitetura de alta vazão que desenvolvemos para a COP 30 opera com tolerância a falhas na Amazônia. Já sintetizamos a proposta técnica preliminar.',
+    aiAgentResponse: 'Perfeito Rodrigo! O núcleo de arquitetura de alta vazão que desenvolvemos para a COP 30 opera com tolerância a falhas na Amazônia. Já sintetizamos a proposta técnica p[...]',
     createdAt: '2026-09-30T17:45:00Z',
     tags: ['COP 30 Lead', 'Enterprise', 'Android App', 'ESG']
   },
@@ -210,7 +334,7 @@ let leadsStore = [
     budgetTier: 'R$ 40.000 - R$ 70.000/mês',
     intent: 'CRM Customizado e Agentes de IA para Prospecção B2B de M&A',
     lastMessage: 'Buscamos um parceiro sênior para desenvolver um CRM proprietário com inteligência artificial para monitorar transações de venture capital.',
-    aiAgentResponse: 'Olá Mariana, nossa engenharia desenvolve CRMs dedicados com pipelines em tempo real e agentes inteligentes que enriquecem dados B2B automaticamente. Enviando o case study da Loops!',
+    aiAgentResponse: 'Olá Mariana, nossa engenharia desenvolve CRMs dedicados com pipelines em tempo real e agentes inteligentes que enriquecem dados B2B automaticamente. Enviando o case study d[...]',
     createdAt: '2026-09-30T18:10:00Z',
     tags: ['Fintech / VC', 'CRM Próprio', 'B2B Leads']
   },
@@ -243,7 +367,7 @@ app.get('/api/tech-news', async (req, res) => {
       try {
         const response = await ai.models.generateContent({
           model: 'gemini-3.8-flash',
-          contents: `Você é a inteligência central da Loops Digital, agência futurista de tecnologia. Gere 4 notícias/fatos recentes e impactantes sobre tecnologia em formato JSON válido (sem markdown de bloco code, apenas o array JSON puro).
+          contents: `Você é a inteligência central da Loops Digital, agência futurista de tecnologia. Gere 4 notícias/fatos recentes e impactantes sobre tecnologia em formato JSON válido (s[...]
           As notícias devem cobrir: Inteligência Artificial & Agentes Autônomos, COP 30 e Sustentabilidade Tecnológica, Tráfego Pago & APIs de Conversão, e Computação Avançada/Mobile.
           Formato de cada item:
           {
@@ -292,7 +416,7 @@ app.post('/api/ai-lead-agent', async (req, res) => {
 
   try {
     let agentResult = {
-      reply: `Olá ${clientName || 'tudo bem'}! Aqui é o Agente Autônomo da Loops Digital. Recebemos seu contato via ${channel || 'rede social'}. Nossas soluções de I.A, Automação e Tráfego já geraram mais de R$ 18M em faturamento para nossos clientes. Gostaria de agendar uma reunião de arquitetura técnica com nosso Engenheiro Sênior?`,
+      reply: `Olá ${clientName || 'tudo bem'}! Aqui é o Agente Autônomo da Loops Digital. Recebemos seu contato via ${channel || 'rede social'}. Nossas soluções de I.A, Automação e Tráfeg[...]`,
       leadScore: 88,
       intentDetected: 'Interesse em Soluções Loops Digital',
       recommendedService: 'Agentes de IA & Tráfego Pago',
@@ -301,7 +425,7 @@ app.post('/api/ai-lead-agent', async (req, res) => {
     };
 
     if (ai) {
-      const prompt = `Você é o Agente de IA Conversacional da agência futurista Loops Digital, fundada por um Engenheiro de Software Sênior especialista em IA, Automação, Tráfego Pago, Agentes de IA, CRMs, Apps Android e projetos de impacto global como a COP 30.
+      const prompt = `Você é o Agente de IA Conversacional da agência futurista Loops Digital, fundada por um Engenheiro de Software Sênior especialista em IA, Automação, Tráfego Pago, Age[...]
       
 Um cliente entrou em contato através de: ${channel || 'Instagram Direct'}.
 Nome do lead: ${clientName || 'Visitante'}
@@ -410,7 +534,7 @@ app.post('/api/gemini/search-grounding', async (req, res) => {
   try {
     if (!ai) {
       return res.json({
-        text: `Informação sobre "${query}": A Loops Digital monitora ativamente as últimas atualizações de mercado em inteligência artificial, tráfego pago CAPI e o ecossistema tecnológico sustentável da COP 30 Belém.`,
+        text: `Informação sobre "${query}": A Loops Digital monitora ativamente as últimas atualizações de mercado em inteligência artificial, tráfego pago CAPI e o ecossistema tecnológic[...]`,
         sources: [
           { title: 'Radar Tecnológico Loops Digital', uri: 'https://loopsdigital.com.br/radar' },
         ],
@@ -452,7 +576,7 @@ app.post('/api/gemini/maps-grounding', async (req, res) => {
   try {
     if (!ai) {
       return res.json({
-        text: `Localização consultada: "${locationQuery}". A Loops Digital atua em polos como Belém (Hangar Centro de Convenções da COP 30) e São Paulo (Faria Lima Tech District), com atendimento global remoto.`,
+        text: `Localização consultada: "${locationQuery}". A Loops Digital atua em polos como Belém (Hangar Centro de Convenções da COP 30) e São Paulo (Faria Lima Tech District), com atend[...]`,
         places: [{ name: locationQuery, address: 'Brasil' }],
       });
     }
@@ -488,18 +612,18 @@ app.post('/api/gemini/chat', async (req, res) => {
 
   const systemInstructions: Record<string, string> = {
     consultor:
-      'Você é o Consultor Técnico Sênior e Estrategista da Loops Digital. Você assessora empresas em IA, automação de processos, criação de agentes autônomos para redes sociais, CRM próprio e arquitetura da COP 30. Responda em português com refinamento executivo estilo Apple.',
+      'Você é o Consultor Técnico Sênior e Estrategista da Loops Digital. Você assessora empresas em IA, automação de processos, criação de agentes autônomos para redes sociais, CRM pr[...]',
     engenheiro:
-      'Você é o Engenheiro de Software Sênior e Arquiteto de Soluções da Loops Digital. Seu foco é arquitetura limpa, Kotlin/Jetpack Android, TypeScript, CAPI server-side, telemetria satelital da COP 30 e escalabilidade de dados.',
+      'Você é o Engenheiro de Software Sênior e Arquiteto de Soluções da Loops Digital. Seu foco é arquitetura limpa, Kotlin/Jetpack Android, TypeScript, CAPI server-side, telemetria sateli[...]',
     vendas:
-      'Você é o Diretor Comercial de Alta Performance da Loops Digital. Explique aos clientes como multiplicamos o faturamento em mais de 300% com tráfego pago avançado, agentes 24/7 e funis de conversão.',
+      'Você é o Diretor Comercial de Alta Performance da Loops Digital. Explique aos clientes como multiplicamos o faturamento em mais de 300% com tráfego pago avançado, agentes 24/7 e funis [...]',
   };
 
   try {
     if (!ai) {
       return res.json({
         reply:
-          'Olá! Na Loops Digital, criamos arquiteturas de Inteligência Artificial e automações multicanais sob medida para impulsionar o faturamento da sua operação. Como posso auxiliar na arquitetura do seu próximo projeto?',
+          'Olá! Na Loops Digital, criamos arquiteturas de Inteligência Artificial e automações multicanais sob medida para impulsionar o faturamento da sua operação. Como posso auxiliar na [...]',
         modelUsed: model,
       });
     }
@@ -533,6 +657,7 @@ app.get('/api/health', (_req, res) => {
     ok: true,
     gemini: Boolean(ai),
     websocket: true,
+    codex: Boolean(process.env.OPENAI_API_KEY),
   });
 });
 
@@ -556,8 +681,9 @@ async function startServer() {
 
   server.listen(PORT, '0.0.0.0', () => {
     console.log(`Loops Digital Server running with WebSockets at http://0.0.0.0:${PORT}`);
+    console.log(`  - Gemini Live API: /live`);
+    console.log(`  - OpenAI Codex Streaming: /codex-stream`);
   });
 }
 
 startServer();
-
