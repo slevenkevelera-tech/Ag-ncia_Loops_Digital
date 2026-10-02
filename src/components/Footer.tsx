@@ -1,12 +1,13 @@
 import React from 'react';
-import { ArrowUpRight } from 'lucide-react';
+import { ArrowUpRight, Code2 } from 'lucide-react';
 
 interface FooterProps {
   onOpenCrm: () => void;
   onOpenQuote: () => void;
+  onOpenCodex?: () => void;
 }
 
-export const Footer: React.FC<FooterProps> = ({ onOpenCrm, onOpenQuote }) => {
+export const Footer: React.FC<FooterProps> = ({ onOpenCrm, onOpenQuote, onOpenCodex }) => {
   return (
     <footer className="border-t border-white/[0.08] bg-[#050608] text-neutral-400 py-16">
       <div className="max-w-7xl mx-auto px-6">
@@ -17,7 +18,7 @@ export const Footer: React.FC<FooterProps> = ({ onOpenCrm, onOpenQuote }) => {
               Loops Digital
             </div>
             <p className="text-xs text-neutral-400 leading-relaxed max-w-sm">
-              Agência digital e estúdio de engenharia fundado por Engenheiro de Software Sênior. Especializada em Inteligência Artificial, Agentes Autônomos multicanais, CRMs sob medida, Tráfego Pago de alta densidade e aplicações críticas como a COP 30.
+              Agência digital e estúdio de engenharia fundado por Engenheiro de Software Sênior. Especializada em Inteligência Artificial, Agentes Autônomos multicanais, CRMs sob medida, Tráfego pago, mobile/web, IA generativa e automações empresariais.
             </p>
             <div className="text-[11px] font-mono text-neutral-500">
               PADRÃO APPLE DE INTERFACE · RESPOSTA &lt; 8S EM IA
@@ -100,6 +101,15 @@ export const Footer: React.FC<FooterProps> = ({ onOpenCrm, onOpenQuote }) => {
                 <span>Solicitar Proposta Técnica</span>
                 <ArrowUpRight className="w-3.5 h-3.5 text-black" />
               </button>
+              {onOpenCodex && (
+                <button
+                  onClick={onOpenCodex}
+                  className="w-full text-left py-2 px-3 rounded-lg bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-xs text-white font-semibold flex items-center justify-between"
+                >
+                  <span>Codex Streaming</span>
+                  <Code2 className="w-3.5 h-3.5 text-white" />
+                </button>
+              )}
             </div>
           </div>
         </div>
