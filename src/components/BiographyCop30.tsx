@@ -67,11 +67,11 @@ export const BiographyCop30: React.FC = () => {
               </div>
 
               <p className="text-neutral-300 leading-relaxed text-sm sm:text-base">
-                Como Engenheiro de Software Sênior e CTO da <strong>Loops Digital</strong>, eu, <strong>Lorenzo Cardoso</strong>, atuo no cruzamento exato entre a vanguarda da <strong>Inteligência Artificial</strong> e a eficiência de negócios. Ao longo da carreira, liderei o desenho de arquiteturas que suportaram desde cúpulas climáticas globais como a <strong>COP 30</strong> até operações comerciais que transacionam múltiplos 7 dígitos mensais.
+                Como Engenheiro de Software Sênior e CTO da <strong>Loops Digital</strong>, eu, <strong>Lorenzo Cardoso</strong>, atuo no cruzamento exato entre a vanguarda da <strong>Inteligência Artificial</strong> e a eficiência de negócios. Ao longo da carreira, auxiliei no desenho de arquiteturas que suportaram desde cúpulas climáticas globais como a <strong>COP 30</strong> até operações comerciais que transacionam múltiplos 6 dígitos mensais.
               </p>
 
               <p className="text-neutral-300 leading-relaxed text-sm sm:text-base">
-                Na <strong>Loops Digital</strong>, transformo a complexidade em vantagem competitiva para nossos clientes: concebemos agentes de IA que assumem conversas humanas sem soar artificiais, CRMs que eliminam o caos operacional, aplicativos Android de padrão internacional e estratégias de tráfego pago baseadas em ciência de dados e algoritmos preditivos.
+                Na <strong>Loops Digital</strong>, transformo a complexidade em vantagem competitiva para nossos clientes: concebemos agentes de IA que assumem conversas humanas sem soar artificiais, assim como aprendem através de algoritmos de <strong>retropropagação (backpropagation)</strong>, ou seja — uma metodologia que utiliza o gradiente do erro para ajustar os pesos da rede de forma eficiente durante o treinamento; além disso, desenvolvemos <strong>CRMs</strong> que eliminam o caos operacional, <strong>aplicativos Android</strong> com padrão internacional e estratégias de <strong>tráfego pago</strong> baseadas em ciência de dados e algoritmos preditivos.
               </p>
 
               {/* Core Skill Matrix */}
@@ -117,7 +117,7 @@ export const BiographyCop30: React.FC = () => {
                 COP 30 Belém: Telemetria e Inteligência Ambiental na Amazônia
               </h3>
               <p className="text-neutral-300 text-sm sm:text-base leading-relaxed">
-                Durante a Conferência das Partes sobre Mudanças Climáticas (COP 30) em Belém, no coração da Amazônia brasileira, desenvolvemos a espinha dorsal de software para telemetria em tempo real. O desafio: operar com zero perda de pacotes e tolerância a interrupções locais de conectividade, unindo imagens de satélite e sensores IoT com modelos neurais preditivos.
+                Durante a Conferência das Partes sobre Mudanças Climáticas (COP 30) em Belém, no coração da Amazônia brasileira, desenvolvemos a espinha dorsal de software para telemetria e análise em tempo real de dados ambientais e operacionais em escala global.
               </p>
 
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 pt-2">
