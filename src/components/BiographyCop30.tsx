@@ -1,113 +1,123 @@
 import React from 'react';
-import { Award, Terminal, MapPin, Zap, Brain, TrendingUp } from 'lucide-react';
+import { Award, Terminal, MapPin, Zap, Brain, TrendingUp, Crown, Briefcase } from 'lucide-react';
 import { FOUNDER_IMAGE, COP30_IMAGE, PROJECT_CASES } from '../data/mockData';
 
 export const BiographyCop30: React.FC = () => {
   return (
     <section id="cop30-bio" className="py-24 border-t border-white/[0.06] bg-[#06080d]">
       <div className="max-w-7xl mx-auto px-6">
-        {/* Section Lead */}
-        <div className="max-w-3xl mb-16">
-          <div className="flex items-center gap-2 text-xs font-mono text-cyan-400 uppercase tracking-wider mb-2">
-            <Terminal className="w-3.5 h-3.5" />
-            <span>Visão Estratégica & Excelência Técnica</span>
-            <span aria-hidden="true">·</span>
-            <span>Pioneirismo Comprovado</span>
+        {/* Premium Section Lead - Luxo / Executive */}
+        <div className="max-w-4xl mb-20">
+          <div className="flex items-center gap-3 text-xs font-mono text-amber-500 uppercase tracking-wider mb-4">
+            <Crown className="w-4 h-4" />
+            <span>Liderança Executiva · Visão Estratégica de Classe Mundial</span>
           </div>
-          <h2 className="text-3xl sm:text-5xl font-bold tracking-tight text-white font-display mb-4">
-            Arquitetura de sistemas em escala global. Transformação de negócios através de tecnologia.
+          <h2 className="text-4xl sm:text-6xl font-bold tracking-tight text-white font-display mb-6 leading-tight">
+            Engenharia que define padrões globais.
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-amber-400 to-yellow-300"> Estratégia que gera valor.</span>
           </h2>
-          <p className="text-neutral-400 text-base sm:text-lg">
-            Liderança técnica estratégica em projetos de missão crítica, inteligência artificial de ponta e infraestruturas digitais de alto desempenho que geram valor mensurável.
+          <p className="text-neutral-300 text-base sm:text-lg font-light leading-relaxed max-w-3xl">
+            Mais de uma década na vanguarda da transformação digital, construindo infraestruturas de missão crítica que sustentam operações de escala global e estabelecendo novos paradigmas em inteligência artificial aplicada ao contexto empresarial.
           </p>
         </div>
 
-        {/* Founder Bio Card - Premium Layout */}
-        <div className="rounded-3xl border border-cyan-500/20 bg-gradient-to-br from-[#0a0e16] via-[#060a11] to-[#0a0d14] p-8 sm:p-12 mb-20 shadow-2xl relative overflow-hidden">
-          {/* Decorative Elements */}
-          <div className="absolute top-0 right-0 w-96 h-96 bg-cyan-500/5 rounded-full blur-3xl -z-10" />
-          <div className="absolute bottom-0 left-0 w-72 h-72 bg-blue-500/5 rounded-full blur-3xl -z-10" />
+        {/* Founder Bio Card - Luxury Executive Edition */}
+        <div className="rounded-3xl border border-amber-500/30 bg-gradient-to-br from-[#0f0a06] via-[#0a0e16] to-[#06080d] p-10 sm:p-16 mb-24 shadow-2xl relative overflow-hidden">
+          {/* Premium Decorative Elements */}
+          <div className="absolute top-0 right-0 w-96 h-96 bg-amber-500/8 rounded-full blur-3xl -z-10" />
+          <div className="absolute bottom-0 left-0 w-80 h-80 bg-yellow-500/5 rounded-full blur-3xl -z-10" />
+          <div className="absolute inset-0 bg-[linear-gradient(135deg,transparent_25%,rgba(217,119,6,0.05)_25%,rgba(217,119,6,0.05)_50%,transparent_50%,transparent_75%,rgba(217,119,6,0.05)_75%,rgba(217,119,6,0.05))] bg-[length:40px_40px] opacity-20 -z-10" />
           
-          <div className="grid lg:grid-cols-12 gap-12 items-center relative z-10">
-            {/* Portrait Column */}
+          <div className="grid lg:grid-cols-12 gap-14 items-center relative z-10">
+            {/* Portrait Column - Premium */}
             <div className="lg:col-span-5 relative">
-              <div className="rounded-2xl overflow-hidden border border-cyan-500/30 aspect-[3/4] bg-neutral-950 shadow-2xl relative group">
-                <img
-                  src={FOUNDER_IMAGE}
-                  alt="Lorenzo Cardoso - Engenheiro Sênior & CTO Loops Digital"
-                  className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-300"
-                  referrerPolicy="no-referrer"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent pointer-events-none" />
-                <div className="absolute bottom-0 left-0 right-0 p-5 bg-gradient-to-t from-black via-black/80 to-transparent">
-                  <div className="text-cyan-300 font-mono text-[10px] uppercase tracking-widest font-bold mb-1">
-                    Principal Architect & CTO
-                  </div>
-                  <div className="text-white font-extrabold text-lg tracking-tight font-display">
-                    Lorenzo Cardoso
-                  </div>
-                  <div className="text-cyan-400 text-[11px] font-mono mt-2">
-                    Loops Digital
+              <div className="relative">
+                {/* Gold Border Frame */}
+                <div className="absolute -inset-2 bg-gradient-to-br from-amber-500/40 to-yellow-600/20 rounded-2xl blur-xl" />
+                <div className="rounded-2xl overflow-hidden border-2 border-amber-500/50 aspect-[3/4] bg-neutral-950 shadow-2xl relative group">
+                  <img
+                    src={FOUNDER_IMAGE}
+                    alt="Lorenzo Cardoso - Principal Architect & CTO Loops Digital"
+                    className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
+                    referrerPolicy="no-referrer"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent pointer-events-none" />
+                  <div className="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-transparent via-amber-400 to-transparent" />
+                  
+                  {/* Luxury Badge */}
+                  <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black via-black/90 to-black/40">
+                    <div className="flex items-center gap-2 mb-2">
+                      <div className="w-1.5 h-1.5 rounded-full bg-amber-400" />
+                      <div className="text-amber-300 font-serif text-[10px] uppercase tracking-widest font-bold">
+                        Principal Architect
+                      </div>
+                    </div>
+                    <div className="text-white font-serif text-2xl tracking-tight font-light mb-1">
+                      Lorenzo Cardoso
+                    </div>
+                    <div className="text-amber-200 text-[11px] font-serif tracking-wide">
+                      Chief Technology Officer · Loops Digital
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
 
-            {/* Biography Content Column */}
-            <div className="lg:col-span-7 space-y-7">
-              <div className="space-y-4">
-                <div className="text-xs font-mono text-neutral-500 flex items-center gap-2 uppercase tracking-wider">
-                  <MapPin className="w-4 h-4 text-cyan-400" />
-                  <span>São Paulo · Belém · Cobertura Global</span>
+            {/* Biography Column - Luxury Premium */}
+            <div className="lg:col-span-7 space-y-8">
+              <div className="space-y-5">
+                <div className="text-xs font-serif text-amber-600/80 flex items-center gap-2 uppercase tracking-widest">
+                  <MapPin className="w-4 h-4 text-amber-500" />
+                  <span>São Paulo · Belém · Alcance Planetário</span>
                 </div>
-                <div className="space-y-2">
-                  <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-cyan-500/15 to-blue-500/15 border border-cyan-500/40 text-xs font-mono text-cyan-200 font-semibold tracking-wider uppercase">
-                    <Zap className="w-3.5 h-3.5" />
-                    <span>Engenheiro Sênior & CTO</span>
+                <div className="space-y-3">
+                  <div className="inline-flex items-center gap-2.5 px-4 py-2.5 rounded-full bg-gradient-to-r from-amber-500/20 to-yellow-500/10 border border-amber-500/50 text-xs font-serif text-amber-200 font-medium tracking-wider uppercase">
+                    <Crown className="w-4 h-4" />
+                    <span>Estrategista Executivo · Engenheiro Sênior</span>
                   </div>
-                  <h3 className="text-4xl sm:text-5xl font-extrabold text-white font-display tracking-tight">
+                  <h3 className="text-5xl sm:text-6xl font-light text-white font-serif tracking-tight">
                     Lorenzo Cardoso
                   </h3>
                 </div>
-                <p className="text-lg text-cyan-300 font-semibold">
-                  Catalisador de Inovação · Arquiteto de Soluções Empresariais
+                <p className="text-lg text-amber-300/90 font-serif italic">
+                  Onde inovação encontra excelência operacional
                 </p>
               </div>
 
-              <div className="h-px bg-gradient-to-r from-cyan-500/20 via-cyan-500/40 to-transparent" />
+              <div className="h-px bg-gradient-to-r from-amber-500/30 via-amber-500/60 to-transparent" />
 
-              <p className="text-neutral-300 leading-relaxed text-sm sm:text-base font-medium">
-                Como <strong>Engenheiro de Software Sênior e CTO da Loops Digital</strong>, eu, <strong>Lorenzo Cardoso</strong>, lidero a convergência estratégica entre a <strong>Inteligência Artificial de vanguarda</strong> e a <strong>eficiência operacional</strong> para transformar desafios comerciais complexos em vantagens competitivas mensuráveis. Com mais de uma década de experiência, construí arquiteturas que alimentaram desde <strong>cúpulas climáticas de relevância global</strong> — como a <strong>COP 30</strong> — até operações comerciais que processam transações de sete dígitos mensais com confiabilidade absoluta.
+              <p className="text-neutral-300 leading-relaxed text-base font-light">
+                Como <strong>Principal Architect e Chief Technology Officer da Loops Digital</strong>, eu, <strong>Lorenzo Cardoso</strong>, orquestro a sinergia entre a <strong>inteligência artificial de ponta</strong> e a <strong>visão estratégica empresarial</strong>, transformando desafios operacionais de alta complexidade em diferencial competitivo durável. Com mais de uma década de liderança técnica, construí sistemas críticos que desde <strong>conferências climáticas de relevância histórica</strong> — como a <strong>COP 30</strong> — até operações comerciais de valor extraordinário estabelecem novos padrões de confiabilidade e desempenho.
               </p>
 
-              <p className="text-neutral-300 leading-relaxed text-sm sm:text-base">
-                Na <strong>Loops Digital</strong>, materializo a complexidade em diferencial competitivo: orquestramos <strong>agentes de IA conversacional</strong> que mantêm diálogos naturais e aprendem através de algoritmos de <strong>retropropagação (backpropagation)</strong> — uma metodologia que otimiza redes neurais artificiais calculando gradientes de erro para ajustes precisos de pesos — enquanto desenvolvemos <strong>CRMs empresariais</strong> que eliminam fricção operacional, <strong>aplicativos Android</strong> em padrão internacional, e <strong>estratégias de tráfego pago</strong> fundamentadas em ciência de dados e algoritmos preditivos que geram ROI exponencial.
+              <p className="text-neutral-300 leading-relaxed text-base font-light">
+                A <strong>Loops Digital</strong> representa minha filosofia de engenharia: transformar complexidade em elegância operacional. Desenvolvemos <strong>agentes conversacionais de IA</strong> que mantêm diálogos autênticos com capacidade de aprendizado contínuo através de <strong>retropropagação neural (backpropagation)</strong> — um algoritmo que refina inteligência artificial através do cálculo preciso de gradientes de erro — enquanto orquestramos <strong>CRMs estratégicos</strong> que eliminam ineficiência operacional, <strong>aplicativos mobile</strong> de padrão internacional, e <strong>arquiteturas de marketing performance</strong> fundamentadas em ciência de dados e previsibilidade de mercado.
               </p>
 
-              {/* Expertise Highlights */}
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 pt-2">
-                <div className="p-4 rounded-xl bg-cyan-500/8 border border-cyan-500/20 hover:border-cyan-500/40 transition-colors">
-                  <div className="text-xs font-bold text-cyan-300 mb-1 uppercase tracking-wider">Agentes de IA</div>
+              {/* Expertise Highlights - Luxury */}
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 pt-4">
+                <div className="p-4 rounded-xl bg-gradient-to-br from-amber-500/12 to-amber-600/5 border border-amber-500/25 hover:border-amber-500/50 transition-all">
+                  <div className="text-xs font-serif text-amber-300 mb-2 uppercase tracking-widest">Agentes de IA</div>
                   <div className="text-[11px] text-neutral-400 font-mono">Gemini · LLMs Multimodal</div>
                 </div>
-                <div className="p-4 rounded-xl bg-blue-500/8 border border-blue-500/20 hover:border-blue-500/40 transition-colors">
-                  <div className="text-xs font-bold text-blue-300 mb-1 uppercase tracking-wider">CRMs Customizados</div>
+                <div className="p-4 rounded-xl bg-gradient-to-br from-yellow-500/12 to-yellow-600/5 border border-yellow-500/25 hover:border-yellow-500/50 transition-all">
+                  <div className="text-xs font-serif text-yellow-300 mb-2 uppercase tracking-widest">CRMs Estratégicos</div>
                   <div className="text-[11px] text-neutral-400 font-mono">OAuth · Sync Real-time</div>
                 </div>
-                <div className="p-4 rounded-xl bg-purple-500/8 border border-purple-500/20 hover:border-purple-500/40 transition-colors">
-                  <div className="text-xs font-bold text-purple-300 mb-1 uppercase tracking-wider">Tráfego Pago CAPI</div>
+                <div className="p-4 rounded-xl bg-gradient-to-br from-amber-400/12 to-amber-500/5 border border-amber-400/25 hover:border-amber-400/50 transition-all">
+                  <div className="text-xs font-serif text-amber-200 mb-2 uppercase tracking-widest">Performance CAPI</div>
                   <div className="text-[11px] text-neutral-400 font-mono">Meta · Google · Predictive</div>
                 </div>
-                <div className="p-4 rounded-xl bg-emerald-500/8 border border-emerald-500/20 hover:border-emerald-500/40 transition-colors">
-                  <div className="text-xs font-bold text-emerald-300 mb-1 uppercase tracking-wider">Apps Android Nativo</div>
+                <div className="p-4 rounded-xl bg-gradient-to-br from-yellow-600/12 to-yellow-700/5 border border-yellow-600/25 hover:border-yellow-600/50 transition-all">
+                  <div className="text-xs font-serif text-yellow-200 mb-2 uppercase tracking-widest">Apps Nativo Mobile</div>
                   <div className="text-[11px] text-neutral-400 font-mono">Kotlin · Jetpack Compose</div>
                 </div>
-                <div className="p-4 rounded-xl bg-pink-500/8 border border-pink-500/20 hover:border-pink-500/40 transition-colors">
-                  <div className="text-xs font-bold text-pink-300 mb-1 uppercase tracking-wider">Infraestrutura Web</div>
+                <div className="p-4 rounded-xl bg-gradient-to-br from-amber-500/12 to-amber-600/5 border border-amber-500/25 hover:border-amber-500/50 transition-all">
+                  <div className="text-xs font-serif text-amber-300 mb-2 uppercase tracking-widest">Plataformas Web</div>
                   <div className="text-[11px] text-neutral-400 font-mono">React · Vite · Node.js</div>
                 </div>
-                <div className="p-4 rounded-xl bg-orange-500/8 border border-orange-500/20 hover:border-orange-500/40 transition-colors">
-                  <div className="text-xs font-bold text-orange-300 mb-1 uppercase tracking-wider">Telemetria & BI</div>
+                <div className="p-4 rounded-xl bg-gradient-to-br from-yellow-500/12 to-yellow-600/5 border border-yellow-500/25 hover:border-yellow-500/50 transition-all">
+                  <div className="text-xs font-serif text-yellow-300 mb-2 uppercase tracking-widest">Telemetria & BI</div>
                   <div className="text-[11px] text-neutral-400 font-mono">Big Data · Crítica</div>
                 </div>
               </div>
@@ -115,103 +125,108 @@ export const BiographyCop30: React.FC = () => {
           </div>
         </div>
 
-        {/* Deep Dive: COP 30 Showcase - Premium Edition */}
-        <div className="rounded-3xl border border-emerald-500/30 bg-gradient-to-br from-[#0a1614] via-[#081210] to-[#070d10] p-8 sm:p-12 mb-16 relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-80 h-80 bg-emerald-500/5 rounded-full blur-3xl -z-10" />
+        {/* COP 30 Showcase - Executive Luxury */}
+        <div className="rounded-3xl border border-amber-500/25 bg-gradient-to-br from-[#0f0a06] via-[#0a0d14] to-[#070d10] p-10 sm:p-14 mb-20 relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-96 h-96 bg-amber-500/8 rounded-full blur-3xl -z-10" />
           
           <div className="flex flex-col lg:flex-row gap-12 items-center justify-between relative z-10">
-            <div className="max-w-2xl space-y-6">
-              <div className="inline-flex items-center gap-2 text-xs font-mono text-emerald-400 uppercase tracking-wider font-bold">
+            <div className="max-w-2xl space-y-7">
+              <div className="inline-flex items-center gap-2.5 text-xs font-serif text-amber-500 uppercase tracking-widest font-medium">
                 <Award className="w-5 h-5" />
-                <span>Engenharia de Escala Planetária</span>
+                <span>Engenharia de Impacto Global</span>
               </div>
               
               <div>
-                <h3 className="text-3xl sm:text-5xl font-bold text-white font-display leading-tight mb-2">
+                <h3 className="text-4xl sm:text-5xl font-light text-white font-serif leading-tight mb-3">
                   COP 30 Belém
                 </h3>
-                <p className="text-emerald-400 text-sm sm:text-base font-semibold">
+                <p className="text-amber-400/90 text-sm sm:text-base font-serif italic">
                   Telemetria & Inteligência Ambiental na Amazônia
                 </p>
               </div>
 
-              <p className="text-neutral-300 text-sm sm:text-base leading-relaxed">
-                Durante a <strong>Conferência das Partes sobre Mudanças Climáticas (COP 30)</strong> em Belém, epicentro da Amazônia brasileira, arquitetei a espinha dorsal de software para telemetria ambiental e inteligência operacional em tempo real — um sistema crítico que sustentou a conferência global com <strong>confiabilidade de 99.998%</strong> e processamento de dados de múltiplas fontes satelitais com latência inferior a 45 milissegundos.
+              <p className="text-neutral-300 leading-relaxed text-base font-light">
+                Durante a <strong>Conferência das Partes sobre Mudanças Climáticas (COP 30)</strong> em Belém, no coração da Amazônia brasileira, liderei a arquitetura de software que sustentou inteligência ambiental e operacional em tempo real — um sistema de criticidade máxima que manteve <strong>99.998% de disponibilidade</strong> processando dados satelitais multifonte com latência inferior a 45 milissegundos, estabelecendo novo padrão de confiabilidade em conferências climáticas globais.
               </p>
 
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 pt-4">
-                <div className="p-4 rounded-xl bg-gradient-to-br from-emerald-500/15 to-emerald-600/10 border border-emerald-500/30">
-                  <div className="text-2xl sm:text-3xl font-bold text-emerald-400 font-mono mb-1">99.998%</div>
-                  <div className="text-xs text-emerald-300 font-medium">Uptime durante cúpula</div>
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 pt-2">
+                <div className="p-5 rounded-xl bg-gradient-to-br from-amber-500/15 to-amber-600/8 border border-amber-500/30">
+                  <div className="text-2xl sm:text-3xl font-light text-amber-300 font-serif mb-2">99.998%</div>
+                  <div className="text-xs text-amber-300/70 font-serif uppercase tracking-wider">Uptime Conferência</div>
                 </div>
-                <div className="p-4 rounded-xl bg-gradient-to-br from-cyan-500/15 to-cyan-600/10 border border-cyan-500/30">
-                  <div className="text-2xl sm:text-3xl font-bold text-cyan-400 font-mono mb-1">&lt;45ms</div>
-                  <div className="text-xs text-cyan-300 font-medium">Latência satelital</div>
+                <div className="p-5 rounded-xl bg-gradient-to-br from-yellow-500/15 to-yellow-600/8 border border-yellow-500/30">
+                  <div className="text-2xl sm:text-3xl font-light text-yellow-300 font-serif mb-2">&lt;45ms</div>
+                  <div className="text-xs text-yellow-300/70 font-serif uppercase tracking-wider">Latência Satelital</div>
                 </div>
-                <div className="p-4 rounded-xl bg-gradient-to-br from-blue-500/15 to-blue-600/10 border border-blue-500/30">
-                  <div className="text-2xl sm:text-3xl font-bold text-blue-400 font-mono mb-1">Zero</div>
-                  <div className="text-xs text-blue-300 font-medium">Downtime · Perda zero</div>
+                <div className="p-5 rounded-xl bg-gradient-to-br from-amber-400/15 to-amber-500/8 border border-amber-400/30">
+                  <div className="text-2xl sm:text-3xl font-light text-amber-200 font-serif mb-2">Zero</div>
+                  <div className="text-xs text-amber-200/70 font-serif uppercase tracking-wider">Downtime · Perda</div>
                 </div>
               </div>
             </div>
 
-            <div className="w-full lg:w-80 rounded-2xl overflow-hidden border border-emerald-500/40 shadow-2xl relative group">
-              <img
-                src={COP30_IMAGE}
-                alt="Centro de Telemetria Ambiental - COP 30"
-                className="w-full h-72 object-cover group-hover:scale-105 transition-transform duration-300"
-                referrerPolicy="no-referrer"
-              />
-              <div className="p-5 bg-gradient-to-t from-black via-black/60 to-transparent border-t border-emerald-500/30">
-                <div className="text-xs font-mono text-emerald-300 font-bold uppercase tracking-wider mb-1">
-                  ⚡ Centro de Telemetria Global
+            <div className="w-full lg:w-80">
+              <div className="relative">
+                <div className="absolute -inset-1 bg-gradient-to-br from-amber-500/30 to-yellow-600/10 rounded-2xl blur-xl" />
+                <div className="rounded-2xl overflow-hidden border border-amber-500/40 shadow-2xl relative group">
+                  <img
+                    src={COP30_IMAGE}
+                    alt="Centro de Telemetria Ambiental - COP 30"
+                    className="w-full h-72 object-cover group-hover:scale-105 transition-transform duration-500"
+                    referrerPolicy="no-referrer"
+                  />
+                  <div className="p-5 bg-gradient-to-t from-black via-black/70 to-transparent border-t border-amber-500/30">
+                    <div className="text-xs font-serif text-amber-300 font-medium uppercase tracking-widest mb-1">
+                      ★ Centro Global de Telemetria
+                    </div>
+                    <div className="text-[12px] text-amber-200/80 font-serif">Belém · Padrão ONU Internacional</div>
+                  </div>
                 </div>
-                <div className="text-[12px] text-emerald-200 font-medium">Belém do Pará · Padrão ONU Internacional</div>
               </div>
             </div>
           </div>
         </div>
 
         {/* Other Notable Projects */}
-        <div className="space-y-7">
-          <div className="space-y-2">
+        <div className="space-y-8">
+          <div className="space-y-3 border-l-2 border-amber-500/40 pl-6">
             <div className="flex items-center gap-2">
-              <TrendingUp className="w-4 h-4 text-cyan-400" />
-              <span className="text-xs font-mono text-cyan-400 uppercase tracking-wider font-bold">Portfólio Técnico</span>
+              <Briefcase className="w-5 h-5 text-amber-500" />
+              <span className="text-xs font-serif text-amber-500 uppercase tracking-widest">Portfólio Premium</span>
             </div>
-            <h3 className="text-2xl font-bold text-white font-display">Projetos Emblemáticos</h3>
+            <h3 className="text-3xl font-light text-white font-serif">Projetos Emblemáticos</h3>
           </div>
           
           <div className="grid md:grid-cols-2 gap-6">
             {PROJECT_CASES.slice(1).map((project) => (
               <div
                 key={project.id}
-                className="rounded-2xl border border-white/[0.08] bg-gradient-to-br from-[#0a0d14] to-[#060a10] p-6 hover:border-cyan-500/30 hover:shadow-lg hover:shadow-cyan-500/10 transition-all duration-300 flex flex-col justify-between group"
+                className="rounded-2xl border border-amber-500/15 bg-gradient-to-br from-[#0a0d14] via-[#060a10] to-[#050809] p-7 hover:border-amber-500/40 hover:shadow-lg hover:shadow-amber-500/5 transition-all duration-300 flex flex-col justify-between group"
               >
                 <div>
-                  <div className="flex items-center justify-between text-xs text-neutral-400 mb-3 font-mono">
-                    <span className="text-cyan-400 font-semibold uppercase">{project.category}</span>
-                    <span className="text-neutral-500 bg-neutral-900/60 px-2 py-1 rounded">{project.highlightTag}</span>
+                  <div className="flex items-center justify-between text-xs text-neutral-500 mb-3 font-serif">
+                    <span className="text-amber-600 font-medium uppercase tracking-wider">{project.category}</span>
+                    <span className="text-neutral-600 bg-neutral-900/40 px-2.5 py-1 rounded-sm text-[10px]">{project.highlightTag}</span>
                   </div>
-                  <h4 className="text-xl font-bold text-white font-display mb-3 group-hover:text-cyan-300 transition-colors">{project.title}</h4>
-                  <p className="text-xs sm:text-sm text-neutral-300 leading-relaxed mb-4">
+                  <h4 className="text-lg font-light text-white font-serif mb-3 group-hover:text-amber-300 transition-colors">{project.title}</h4>
+                  <p className="text-xs sm:text-sm text-neutral-400 leading-relaxed mb-4">
                     {project.description}
                   </p>
                 </div>
 
-                <div className="pt-4 border-t border-white/[0.06] space-y-4">
+                <div className="pt-4 border-t border-amber-500/10 space-y-4">
                   <div className="flex flex-wrap gap-2">
                     {project.technologies.map((t) => (
-                      <span key={t} className="text-[11px] font-mono text-cyan-300 bg-cyan-500/10 px-2.5 py-1 rounded-full border border-cyan-500/20">
+                      <span key={t} className="text-[10px] font-mono text-amber-400/80 bg-amber-500/8 px-2.5 py-1 rounded-sm border border-amber-500/15">
                         {t}
                       </span>
                     ))}
                   </div>
-                  <div className="flex items-center justify-between text-xs font-mono text-neutral-300 pt-2 border-t border-white/[0.06]">
+                  <div className="flex items-center justify-between text-xs font-serif text-neutral-400 pt-2 border-t border-amber-500/10">
                     {project.metrics.map((m) => (
                       <div key={m.label}>
-                        <span className="text-neutral-500">{m.label}: </span>
-                        <span className="text-cyan-400 font-bold">{m.value}</span>
+                        <span className="text-neutral-600">{m.label}: </span>
+                        <span className="text-amber-400">{m.value}</span>
                       </div>
                     ))}
                   </div>
@@ -221,18 +236,22 @@ export const BiographyCop30: React.FC = () => {
           </div>
         </div>
 
-        {/* CTA Section */}
-        <div className="mt-16 p-8 rounded-2xl bg-gradient-to-r from-cyan-500/10 via-blue-500/10 to-purple-500/10 border border-cyan-500/20">
-          <div className="flex items-center gap-3 mb-3">
-            <Brain className="w-5 h-5 text-cyan-400" />
-            <span className="text-xs font-mono text-cyan-400 uppercase tracking-wider font-bold">Loops Digital</span>
+        {/* CTA Section - Luxury Executive */}
+        <div className="mt-16 p-10 rounded-3xl bg-gradient-to-r from-amber-500/12 via-yellow-500/8 to-amber-600/12 border border-amber-500/25 relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-64 h-64 bg-amber-500/8 rounded-full blur-3xl -z-10" />
+          <div className="flex items-start gap-6">
+            <div className="flex-shrink-0">
+              <Crown className="w-6 h-6 text-amber-500" />
+            </div>
+            <div>
+              <h3 className="text-2xl sm:text-3xl font-light text-white font-serif mb-3">
+                Loops Digital · Excelência em Transformação Digital
+              </h3>
+              <p className="text-neutral-400 text-sm sm:text-base font-light leading-relaxed">
+                Redefina sua operação empresarial com arquitetura de classe mundial. A Loops Digital combina expertise técnica de ponta, liderança estratégica e comprometimento com excelência para construir soluções que geram valor durável e sustentável.
+              </p>
+            </div>
           </div>
-          <h3 className="text-2xl sm:text-3xl font-bold text-white font-display mb-3">
-            Transforme seu negócio com arquitetura de escala global
-          </h3>
-          <p className="text-neutral-400 text-sm sm:text-base">
-            A Loops Digital combina expertise técnica de ponta com visão estratégica para construir soluções que geram valor real. De agentes de IA conversacional até infraestruturas críticas, entregamos excelência.
-          </p>
         </div>
       </div>
     </section>
