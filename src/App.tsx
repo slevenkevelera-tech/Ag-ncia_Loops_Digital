@@ -17,6 +17,7 @@ import { CrmDashboardModal } from './components/CrmDashboardModal';
 import { ProjectCalculatorModal } from './components/ProjectCalculatorModal';
 import { VoiceLiveModal } from './components/VoiceLiveModal';
 import { GeminiChatbotModal } from './components/GeminiChatbotModal';
+import { CodexModal } from './components/CodexModal';
 import { testFirestoreConnection, auth } from './lib/firebase';
 import { onAuthStateChanged, User } from 'firebase/auth';
 
@@ -25,6 +26,7 @@ export default function App() {
   const [isQuoteOpen, setIsQuoteOpen] = useState<boolean>(false);
   const [isVoiceOpen, setIsVoiceOpen] = useState<boolean>(false);
   const [isChatOpen, setIsChatOpen] = useState<boolean>(false);
+  const [isCodexOpen, setIsCodexOpen] = useState<boolean>(false);
   const [firebaseUser, setFirebaseUser] = useState<User | null>(null);
 
   useEffect(() => {
@@ -47,6 +49,7 @@ export default function App() {
         onOpenQuote={() => setIsQuoteOpen(true)}
         onOpenVoice={() => setIsVoiceOpen(true)}
         onOpenChat={() => setIsChatOpen(true)}
+        onOpenCodex={() => setIsCodexOpen(true)}
         isGoogleAuthenticated={!!firebaseUser}
       />
 
@@ -86,6 +89,7 @@ export default function App() {
       <Footer
         onOpenCrm={() => setIsCrmOpen(true)}
         onOpenQuote={() => setIsQuoteOpen(true)}
+        onOpenCodex={() => setIsCodexOpen(true)}
       />
 
       {/* Administrative CRM Dashboard with Google OAuth & Social Connections */}
@@ -117,6 +121,12 @@ export default function App() {
           setIsChatOpen(false);
           setIsVoiceOpen(true);
         }}
+      />
+
+      {/* OpenAI Codex Assistant Modal - Real-time Streaming */}
+      <CodexModal
+        isOpen={isCodexOpen}
+        onClose={() => setIsCodexOpen(false)}
       />
     </div>
   );
