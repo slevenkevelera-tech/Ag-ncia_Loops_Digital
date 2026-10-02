@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { ShieldCheck, Menu, X, Terminal, Sparkles, Mic, MessageSquare } from 'lucide-react';
+import { ShieldCheck, Menu, X, Sparkles, Mic, MessageSquare, Code2 } from 'lucide-react';
 
 interface NavbarProps {
   onOpenCrm: () => void;
   onOpenQuote: () => void;
   onOpenVoice: () => void;
   onOpenChat: () => void;
+  onOpenCodex?: () => void;
   isGoogleAuthenticated: boolean;
 }
 
@@ -14,6 +15,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   onOpenQuote,
   onOpenVoice,
   onOpenChat,
+  onOpenCodex,
   isGoogleAuthenticated,
 }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -21,12 +23,10 @@ export const Navbar: React.FC<NavbarProps> = ({
   return (
     <header className="fixed top-0 left-0 right-0 z-50 border-b border-white/[0.08] bg-[#060709]/80 backdrop-blur-xl">
       <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
-        {/* Zone 1: Single text element wordmark */}
         <a href="#" className="text-xl font-bold tracking-tight text-white font-display flex items-center gap-2 hover:opacity-90 transition-opacity">
           <span>Loops Digital</span>
         </a>
 
-        {/* Zone 2: 4-6 clean text navigation links */}
         <nav className="hidden md:flex items-center gap-7 text-sm font-medium text-neutral-300">
           <a href="#solucoes" className="hover:text-white transition-colors">Soluções</a>
           <a href="#cop30-bio" className="hover:text-white transition-colors">Cases & COP 30</a>
@@ -38,7 +38,6 @@ export const Navbar: React.FC<NavbarProps> = ({
           <a href="#depoimentos" className="hover:text-white transition-colors">Resultados</a>
         </nav>
 
-        {/* Zone 3: 1-2 primary actions */}
         <div className="flex items-center gap-2 sm:gap-3">
           <button
             onClick={onOpenVoice}
@@ -60,7 +59,7 @@ export const Navbar: React.FC<NavbarProps> = ({
 
           <button
             onClick={onOpenCrm}
-            className="flex items-center gap-2 px-3 py-1.5 text-xs font-semibold text-neutral-200 bg-neutral-900 hover:bg-neutral-800 border border-neutral-700/80 rounded-lg transition-all duration-200 hover:border-neutral-500 whitespace-nowrap"
+            className="flex items-center gap-2 px-3 py-1.5 text-xs font-semibold text-neutral-200 bg-neutral-900 hover:bg-neutral-800 border border-neutral-700/80 rounded-lg transition-all duration-200 whitespace-nowrap"
           >
             <ShieldCheck className={`w-3.5 h-3.5 ${isGoogleAuthenticated ? 'text-emerald-400' : 'text-neutral-400'}`} />
             <span>CRM</span>
@@ -74,7 +73,6 @@ export const Navbar: React.FC<NavbarProps> = ({
             <span>Proposta</span>
           </button>
 
-          {/* Mobile menu trigger */}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             className="md:hidden p-2 text-neutral-400 hover:text-white"
@@ -85,44 +83,14 @@ export const Navbar: React.FC<NavbarProps> = ({
         </div>
       </div>
 
-      {/* Mobile Drawer */}
       {mobileMenuOpen && (
         <div className="md:hidden border-b border-neutral-800 bg-[#07090e] px-6 py-4 space-y-3">
-          <a
-            href="#solucoes"
-            onClick={() => setMobileMenuOpen(false)}
-            className="block text-sm text-neutral-300 hover:text-white py-1"
-          >
-            Soluções
-          </a>
-          <a
-            href="#cop30-bio"
-            onClick={() => setMobileMenuOpen(false)}
-            className="block text-sm text-neutral-300 hover:text-white py-1"
-          >
-            Cases & COP 30
-          </a>
-          <a
-            href="#google-grounding"
-            onClick={() => setMobileMenuOpen(false)}
-            className="block text-sm text-neutral-300 hover:text-white py-1"
-          >
-            Grounding Google (Search & Maps)
-          </a>
-          <a
-            href="#tech-news"
-            onClick={() => setMobileMenuOpen(false)}
-            className="block text-sm text-neutral-300 hover:text-white py-1"
-          >
-            Tech News API
-          </a>
-          <a
-            href="#depoimentos"
-            onClick={() => setMobileMenuOpen(false)}
-            className="block text-sm text-neutral-300 hover:text-white py-1"
-          >
-            Resultados & Clientes
-          </a>
+          <a href="#solucoes" onClick={() => setMobileMenuOpen(false)} className="block text-sm text-neutral-300 hover:text-white py-1">Soluções</a>
+          <a href="#cop30-bio" onClick={() => setMobileMenuOpen(false)} className="block text-sm text-neutral-300 hover:text-white py-1">Cases & COP 30</a>
+          <a href="#google-grounding" onClick={() => setMobileMenuOpen(false)} className="block text-sm text-neutral-300 hover:text-white py-1">Grounding Google (Search & Maps)</a>
+          <a href="#tech-news" onClick={() => setMobileMenuOpen(false)} className="block text-sm text-neutral-300 hover:text-white py-1">Tech News API</a>
+          <a href="#depoimentos" onClick={() => setMobileMenuOpen(false)} className="block text-sm text-neutral-300 hover:text-white py-1">Resultados & Clientes</a>
+
           <div className="pt-2 flex flex-col gap-2">
             <button
               onClick={() => {
@@ -134,6 +102,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               <Mic className="w-3.5 h-3.5" />
               <span>Modo Voz (Live API gemini-3.8-live)</span>
             </button>
+
             <button
               onClick={() => {
                 setMobileMenuOpen(false);
@@ -144,6 +113,20 @@ export const Navbar: React.FC<NavbarProps> = ({
               <MessageSquare className="w-3.5 h-3.5" />
               <span>Chatbot Gemini</span>
             </button>
+
+            {onOpenCodex && (
+              <button
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  onOpenCodex();
+                }}
+                className="w-full text-center px-4 py-2 text-xs font-semibold text-white bg-gradient-to-r from-blue-600 to-purple-600 border border-blue-500/30 rounded-lg flex items-center justify-center gap-2"
+              >
+                <Code2 className="w-3.5 h-3.5" />
+                <span>Codex</span>
+              </button>
+            )}
+
             <button
               onClick={() => {
                 setMobileMenuOpen(false);
