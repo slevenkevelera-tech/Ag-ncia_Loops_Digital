@@ -18,12 +18,17 @@ app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 
 // Store uploaded founder photo in memory or on disk
 let customFounderPhoto: string | null = null;
-const customPhotoPath = path.resolve(process.cwd(), 'src/assets/images/custom_founder_uploaded.png');
-if (fs.existsSync(customPhotoPath)) {
-  try {
-    customFounderPhoto = `/src/assets/images/custom_founder_uploaded.png`;
-  } catch {}
+const uploadsDir = path.resolve(process.cwd(), 'uploads');
+if (!fs.existsSync(uploadsDir)) {
+  fs.mkdirSync(uploadsDir, { recursive: true });
 }
+const customPhotoPath = path.resolve(uploadsDir, 'custom_founder_uploaded.png');
+if (fs.existsSync(customPhotoPath)) {
+  customFounderPhoto = `/uploads/custom_founder_uploaded.png`;
+}
+
+app.use('/uploads', express.static(uploadsDir));
+app.use('/src/assets', express.static(path.resolve(process.cwd(), 'src/assets')));
 
 app.get('/api/founder-photo', (req, res) => {
   if (customFounderPhoto) {
@@ -43,7 +48,7 @@ app.post('/api/upload-founder-photo', (req, res) => {
     if (matches && matches.length === 3) {
       const buffer = Buffer.from(matches[2], 'base64');
       fs.writeFileSync(customPhotoPath, buffer);
-      customFounderPhoto = `/src/assets/images/custom_founder_uploaded.png?t=${Date.now()}`;
+      customFounderPhoto = `/uploads/custom_founder_uploaded.png?t=${Date.now()}`;
       return res.json({ success: true, photoUrl: customFounderPhoto });
     } else {
       customFounderPhoto = dataUrl;
