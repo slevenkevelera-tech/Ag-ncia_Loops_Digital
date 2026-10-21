@@ -570,17 +570,20 @@ app.post('/api/gemini/chat', async (req, res) => {
 
 // Start server with Vite middleware in dev or static serving in prod
 async function startServer() {
-  if (process.env.NODE_ENV !== 'production') {
+  const distPath = path.resolve(process.cwd(), 'dist');
+  const isProd = process.env.NODE_ENV === 'production' || fs.existsSync(path.join(distPath, 'index.html'));
+
+  if (isProd) {
+    app.use(express.static(distPath));
+    app.get('*', (req, res) => {
+      res.sendFile(path.join(distPath, 'index.html'));
+    });
+  } else {
     const vite = await createViteServer({
       server: { middlewareMode: true },
       appType: 'spa',
     });
     app.use(vite.middlewares);
-  } else {
-    app.use(express.static(path.resolve(process.cwd(), 'dist')));
-    app.get('*', (req, res) => {
-      res.sendFile(path.resolve(process.cwd(), 'dist', 'index.html'));
-    });
   }
 
   server.listen(PORT, '0.0.0.0', () => {
