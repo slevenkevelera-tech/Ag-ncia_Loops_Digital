@@ -58,6 +58,220 @@ app.post('/api/upload-founder-photo', (req, res) => {
   }
 });
 
+// ==========================================
+// EXTERNAL AGENT SWARM GATEWAY & OAUTH ENDPOINTS
+// ==========================================
+const externalAgentsConfigFile = path.resolve(process.cwd(), 'src/data/external_agents_config.json');
+
+function getExternalAgentsConfig() {
+  try {
+    if (fs.existsSync(externalAgentsConfigFile)) {
+      return JSON.parse(fs.readFileSync(externalAgentsConfigFile, 'utf-8'));
+    }
+  } catch (e) {
+    console.error('Error reading external_agents_config.json:', e);
+  }
+  return {
+    endpointUrl: '',
+    authType: 'bearer',
+    token: '',
+    headerName: 'Authorization',
+    autoDispatchLeads: true,
+    status: 'disconnected',
+    discoveredAgents: [],
+  };
+}
+
+function saveExternalAgentsConfig(config: any) {
+  try {
+    fs.writeFileSync(externalAgentsConfigFile, JSON.stringify(config, null, 2), 'utf-8');
+  } catch (e) {
+    console.error('Error saving external_agents_config.json:', e);
+  }
+}
+
+// 1. Get External Agent Configuration (Token masked for security)
+app.get('/api/external-agents', (req, res) => {
+  const config = getExternalAgentsConfig();
+  const maskedToken = config.token
+    ? `${config.token.slice(0, 4)}••••••••${config.token.slice(-4)}`
+    : '';
+  res.json({
+    ...config,
+    hasToken: Boolean(config.token),
+    maskedToken,
+    token: undefined,
+  });
+});
+
+// 2. Save or update External Agent Connection Config
+app.post('/api/external-agents', (req, res) => {
+  const { endpointUrl, authType, token, headerName, autoDispatchLeads, discoveredAgents } = req.body;
+  const currentConfig = getExternalAgentsConfig();
+
+  const newConfig = {
+    ...currentConfig,
+    endpointUrl: endpointUrl !== undefined ? endpointUrl : currentConfig.endpointUrl,
+    authType: authType || currentConfig.authType || 'bearer',
+    token: token && !token.includes('••••') ? token : currentConfig.token,
+    headerName: headerName || currentConfig.headerName || 'Authorization',
+    autoDispatchLeads: autoDispatchLeads !== undefined ? autoDispatchLeads : currentConfig.autoDispatchLeads,
+    discoveredAgents: discoveredAgents || currentConfig.discoveredAgents || [],
+  };
+
+  saveExternalAgentsConfig(newConfig);
+  res.json({
+    success: true,
+    message: 'Configuração do swarm de agentes salva com sucesso',
+    hasToken: Boolean(newConfig.token),
+    status: newConfig.status,
+  });
+});
+
+// 3. Test Connection / Ping External Agent Endpoint with Token / OAuth
+app.post('/api/external-agents/test', async (req, res) => {
+  const { endpointUrl, authType, token, headerName } = req.body;
+  const currentConfig = getExternalAgentsConfig();
+  const targetUrl = endpointUrl || currentConfig.endpointUrl;
+  const targetToken = (token && !token.includes('••••')) ? token : currentConfig.token;
+  const targetAuthType = authType || currentConfig.authType || 'bearer';
+  const targetHeader = headerName || currentConfig.headerName || 'Authorization';
+
+  if (!targetUrl) {
+    return res.status(400).json({ error: 'URL do endpoint é obrigatória para o teste.' });
+  }
+
+  const startTime = Date.now();
+  try {
+    const headers: Record<string, string> = {
+      'Content-Type': 'application/json',
+      'User-Agent': 'Loops-Digital-Agent-Gateway/1.0',
+    };
+
+    if (targetToken) {
+      if (targetAuthType === 'bearer') {
+        headers[targetHeader] = `Bearer ${targetToken}`;
+      } else if (targetAuthType === 'apikey' || targetAuthType === 'custom') {
+        headers[targetHeader] = targetToken;
+      }
+    }
+
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 7000);
+
+    const response = await fetch(targetUrl, {
+      method: 'POST',
+      headers,
+      body: JSON.stringify({
+        action: 'ping',
+        source: 'loops-digital-platform',
+        timestamp: new Date().toISOString(),
+      }),
+      signal: controller.signal,
+    });
+    clearTimeout(timeoutId);
+
+    const latency = Date.now() - startTime;
+    let data: any = {};
+    try {
+      data = await response.json();
+    } catch {
+      data = { rawStatusText: response.statusText };
+    }
+
+    const isSuccess = response.ok;
+    const updatedStatus = isSuccess ? 'connected' : 'error';
+    
+    const discoveredAgents = Array.isArray(data?.agents)
+      ? data.agents
+      : (currentConfig.discoveredAgents || []);
+
+    const updatedConfig = {
+      ...currentConfig,
+      endpointUrl: targetUrl,
+      status: updatedStatus,
+      lastTested: new Date().toISOString(),
+      discoveredAgents,
+    };
+    if (targetToken) updatedConfig.token = targetToken;
+    saveExternalAgentsConfig(updatedConfig);
+
+    res.json({
+      success: isSuccess,
+      status: response.status,
+      statusText: response.statusText,
+      latencyMs: latency,
+      data,
+      discoveredAgents,
+      message: isSuccess
+        ? `Conexão estabelecida com sucesso! (${latency}ms)`
+        : `Endpoint respondeu com status HTTP ${response.status}`,
+    });
+  } catch (err: any) {
+    const latency = Date.now() - startTime;
+    res.json({
+      success: false,
+      status: 0,
+      latencyMs: latency,
+      error: err.name === 'AbortError' ? 'Tempo limite esgotado (timeout de 7s)' : err.message,
+      message: `Falha ao conectar no endpoint: ${err.message}`,
+    });
+  }
+});
+
+// 4. Dispatch a Task/Lead/Demand to External Agent Swarm
+app.post('/api/external-agents/dispatch', async (req, res) => {
+  const { demand, clientInfo, agentId } = req.body;
+  const config = getExternalAgentsConfig();
+
+  if (!config.endpointUrl) {
+    return res.status(400).json({ error: 'Nenhum endpoint de agentes externos configurado.' });
+  }
+
+  const startTime = Date.now();
+  try {
+    const headers: Record<string, string> = {
+      'Content-Type': 'application/json',
+      'User-Agent': 'Loops-Digital-Agent-Gateway/1.0',
+    };
+    if (config.token) {
+      const headerName = config.headerName || 'Authorization';
+      headers[headerName] = config.authType === 'bearer' ? `Bearer ${config.token}` : config.token;
+    }
+
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 10000);
+
+    const response = await fetch(config.endpointUrl, {
+      method: 'POST',
+      headers,
+      body: JSON.stringify({
+        event: 'website_demand_dispatched',
+        source: 'loops-digital-web',
+        agentId: agentId || 'auto_assign',
+        demand: demand || {},
+        clientInfo: clientInfo || {},
+        timestamp: new Date().toISOString(),
+      }),
+      signal: controller.signal,
+    });
+    clearTimeout(timeoutId);
+
+    const data = await response.json().catch(() => ({}));
+    res.json({
+      success: response.ok,
+      status: response.status,
+      latencyMs: Date.now() - startTime,
+      response: data,
+    });
+  } catch (err: any) {
+    res.status(500).json({
+      error: 'Falha ao despachar demanda para os agentes externos',
+      details: err?.message,
+    });
+  }
+});
+
 // Initialize Google GenAI
 const ai = process.env.GEMINI_API_KEY
   ? new GoogleGenAI({

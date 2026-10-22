@@ -6,6 +6,7 @@ interface NavbarProps {
   onOpenQuote: () => void;
   onOpenVoice: () => void;
   onOpenChat: () => void;
+  onOpenExternalAgents: () => void;
   isGoogleAuthenticated: boolean;
 }
 
@@ -14,6 +15,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   onOpenQuote,
   onOpenVoice,
   onOpenChat,
+  onOpenExternalAgents,
   isGoogleAuthenticated,
 }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -41,9 +43,18 @@ export const Navbar: React.FC<NavbarProps> = ({
         {/* Zone 3: 1-2 primary actions */}
         <div className="flex items-center gap-2 sm:gap-3">
           <button
+            onClick={onOpenExternalAgents}
+            title="Conexão com Swarm de Agentes Externos (OAuth / Webhook)"
+            className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-cyan-300 bg-cyan-950/40 hover:bg-cyan-900/60 border border-cyan-500/30 rounded-lg transition-all whitespace-nowrap"
+          >
+            <ShieldCheck className="w-3.5 h-3.5 text-cyan-400" />
+            <span className="hidden sm:inline">Swarm Agentes</span>
+          </button>
+
+          <button
             onClick={onOpenVoice}
             title="Conversar por Voz (Gemini-3.8-Live)"
-            className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-cyan-300 bg-cyan-950/40 hover:bg-cyan-900/60 border border-cyan-500/30 rounded-lg transition-all whitespace-nowrap"
+            className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-neutral-200 bg-neutral-900 hover:bg-neutral-800 border border-neutral-700/80 rounded-lg transition-all whitespace-nowrap"
           >
             <Mic className="w-3.5 h-3.5 text-cyan-400 animate-pulse" />
             <span className="hidden sm:inline">Voz ao Vivo</span>

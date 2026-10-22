@@ -1,20 +1,21 @@
 import React from 'react';
-import { ArrowRight, Terminal, Cpu, Radio, Sparkles } from 'lucide-react';
+import { ArrowRight, Terminal, Cpu, Radio, Sparkles, Bot, Link } from 'lucide-react';
 import { AiShowcaseCarousel } from './AiShowcaseCarousel';
-import { NeuralNetworkBackground } from './NeuralNetworkBackground';
+import { Neural3DBackground } from './Neural3DBackground';
 
 interface HeroProps {
   onOpenCrm: () => void;
   onOpenQuote: () => void;
+  onOpenExternalAgents: () => void;
 }
 
-export const Hero: React.FC<HeroProps> = ({ onOpenCrm, onOpenQuote }) => {
+export const Hero: React.FC<HeroProps> = ({ onOpenCrm, onOpenQuote, onOpenExternalAgents }) => {
   return (
     <section className="relative pt-32 pb-20 md:pt-40 md:pb-28 overflow-hidden">
-      {/* Subtle ambient neural network animation */}
-      <NeuralNetworkBackground />
+      {/* 3D WebGL Neural Network Animation in Three.js (non-intrusive ambient depth) */}
+      <Neural3DBackground />
 
-      {/* Subtle background ambient radial gradient */}
+      {/* Subtle background ambient radial gradient to ensure dark backdrop & 100% text readability */}
       <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[400px] bg-gradient-to-tr from-cyan-950/20 via-blue-900/10 to-transparent blur-[120px] pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-6 relative z-10">
@@ -53,6 +54,14 @@ export const Hero: React.FC<HeroProps> = ({ onOpenCrm, onOpenQuote }) => {
           >
             <Radio className="w-4 h-4 text-cyan-400 animate-pulse" />
             <span>Abrir CRM Administrativo</span>
+          </button>
+
+          <button
+            onClick={onOpenExternalAgents}
+            className="flex items-center gap-2 px-6 py-3.5 text-sm font-semibold text-cyan-300 bg-cyan-950/40 hover:bg-cyan-900/40 border border-cyan-500/40 rounded-xl transition-all duration-200 hover:border-cyan-400 shadow-lg shadow-cyan-500/5 whitespace-nowrap"
+          >
+            <Bot className="w-4 h-4 text-cyan-400" />
+            <span>Conectar Agentes Externos (OAuth)</span>
           </button>
         </div>
 

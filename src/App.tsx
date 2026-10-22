@@ -17,6 +17,7 @@ import { CrmDashboardModal } from './components/CrmDashboardModal';
 import { ProjectCalculatorModal } from './components/ProjectCalculatorModal';
 import { VoiceLiveModal } from './components/VoiceLiveModal';
 import { GeminiChatbotModal } from './components/GeminiChatbotModal';
+import { ExternalAgentsModal } from './components/ExternalAgentsModal';
 import { testFirestoreConnection, auth } from './lib/firebase';
 import { onAuthStateChanged, User } from 'firebase/auth';
 
@@ -25,6 +26,7 @@ export default function App() {
   const [isQuoteOpen, setIsQuoteOpen] = useState<boolean>(false);
   const [isVoiceOpen, setIsVoiceOpen] = useState<boolean>(false);
   const [isChatOpen, setIsChatOpen] = useState<boolean>(false);
+  const [isExternalAgentsOpen, setIsExternalAgentsOpen] = useState<boolean>(false);
   const [firebaseUser, setFirebaseUser] = useState<User | null>(null);
 
   useEffect(() => {
@@ -47,15 +49,17 @@ export default function App() {
         onOpenQuote={() => setIsQuoteOpen(true)}
         onOpenVoice={() => setIsVoiceOpen(true)}
         onOpenChat={() => setIsChatOpen(true)}
+        onOpenExternalAgents={() => setIsExternalAgentsOpen(true)}
         isGoogleAuthenticated={!!firebaseUser}
       />
 
       {/* Main Content Flow */}
       <main className="flex-1">
-        {/* Apple Keynote-inspired Hero Section */}
+        {/* Apple Keynote-inspired Hero Section with 3D Neural Network */}
         <Hero
           onOpenCrm={() => setIsCrmOpen(true)}
           onOpenQuote={() => setIsQuoteOpen(true)}
+          onOpenExternalAgents={() => setIsExternalAgentsOpen(true)}
         />
 
         {/* 5 Core Technical Capabilities Showcase */}
@@ -117,6 +121,12 @@ export default function App() {
           setIsChatOpen(false);
           setIsVoiceOpen(true);
         }}
+      />
+
+      {/* External Multi-Agent Swarm Gateway & OAuth Endpoint Connection */}
+      <ExternalAgentsModal
+        isOpen={isExternalAgentsOpen}
+        onClose={() => setIsExternalAgentsOpen(false)}
       />
     </div>
   );

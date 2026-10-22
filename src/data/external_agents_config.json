@@ -1,0 +1,29 @@
+{
+  "endpointUrl": "https://api.plataforma-agentes.ai/v1/swarm",
+  "authType": "bearer",
+  "token": "",
+  "headerName": "Authorization",
+  "autoDispatchLeads": true,
+  "status": "ready",
+  "lastTested": null,
+  "discoveredAgents": [
+    {
+      "id": "agent-sdr-01",
+      "name": "Agente SDR Triagem & Qualificação",
+      "specialty": "Atendimento receptivo de leads e WhatsApp",
+      "status": "online"
+    },
+    {
+      "id": "agent-arch-02",
+      "name": "Agente Arquiteto de Software & COP 30",
+      "specialty": "Dimensionamento de infraestrutura e orçamentos",
+      "status": "online"
+    },
+    {
+      "id": "agent-social-03",
+      "name": "Agente Social & Automação Multicanal",
+      "specialty": "Gestão autônoma de directs e comentários",
+      "status": "online"
+    }
+  ]
+}
