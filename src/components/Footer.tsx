@@ -4,9 +4,18 @@ import { ArrowUpRight } from 'lucide-react';
 interface FooterProps {
   onOpenCrm: () => void;
   onOpenQuote: () => void;
+  onOpenPrivacy?: () => void;
+  onOpenTerms?: () => void;
+  onOpenSocialAds?: () => void;
 }
 
-export const Footer: React.FC<FooterProps> = ({ onOpenCrm, onOpenQuote }) => {
+export const Footer: React.FC<FooterProps> = ({
+  onOpenCrm,
+  onOpenQuote,
+  onOpenPrivacy,
+  onOpenTerms,
+  onOpenSocialAds,
+}) => {
   return (
     <footer className="border-t border-white/[0.08] bg-[#050608] text-neutral-400 py-16">
       <div className="max-w-7xl mx-auto px-6">
@@ -100,6 +109,13 @@ export const Footer: React.FC<FooterProps> = ({ onOpenCrm, onOpenQuote }) => {
                 <span>Solicitar Proposta Técnica</span>
                 <ArrowUpRight className="w-3.5 h-3.5 text-black" />
               </button>
+              <button
+                onClick={onOpenSocialAds}
+                className="w-full text-left py-2 px-3 rounded-lg bg-cyan-950/40 hover:bg-cyan-900/40 text-xs text-cyan-300 border border-cyan-500/30 flex items-center justify-between"
+              >
+                <span>APIs Tráfego Pago & CAPI</span>
+                <ArrowUpRight className="w-3.5 h-3.5 text-cyan-400" />
+              </button>
             </div>
           </div>
         </div>
@@ -109,10 +125,18 @@ export const Footer: React.FC<FooterProps> = ({ onOpenCrm, onOpenQuote }) => {
           <div>
             © {new Date().getFullYear()} Loops Digital. Todos os direitos reservados.
           </div>
-          <div className="flex items-center gap-4">
-            <span>Privacidade & LGPD</span>
+          <div className="flex flex-wrap items-center gap-3">
+            <button onClick={onOpenPrivacy} className="hover:text-cyan-400 transition-colors">
+              Privacidade & LGPD
+            </button>
             <span aria-hidden="true">·</span>
-            <span>Segurança Server-Side</span>
+            <button onClick={onOpenTerms} className="hover:text-cyan-400 transition-colors">
+              Termos de Uso
+            </button>
+            <span aria-hidden="true">·</span>
+            <button onClick={onOpenSocialAds} className="hover:text-cyan-400 transition-colors">
+              Meta CAPI & Google Tag
+            </button>
             <span aria-hidden="true">·</span>
             <span>Belém/Cametá - PA, Brasil</span>
           </div>

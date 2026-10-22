@@ -18,6 +18,9 @@ import { ProjectCalculatorModal } from './components/ProjectCalculatorModal';
 import { VoiceLiveModal } from './components/VoiceLiveModal';
 import { GeminiChatbotModal } from './components/GeminiChatbotModal';
 import { ExternalAgentsModal } from './components/ExternalAgentsModal';
+import { SocialAdsComplianceModal } from './components/SocialAdsComplianceModal';
+import { CookieConsentBanner } from './components/CookieConsentBanner';
+import { LegalModals } from './components/LegalModals';
 import { testFirestoreConnection, auth } from './lib/firebase';
 import { onAuthStateChanged, User } from 'firebase/auth';
 
@@ -27,6 +30,8 @@ export default function App() {
   const [isVoiceOpen, setIsVoiceOpen] = useState<boolean>(false);
   const [isChatOpen, setIsChatOpen] = useState<boolean>(false);
   const [isExternalAgentsOpen, setIsExternalAgentsOpen] = useState<boolean>(false);
+  const [isSocialAdsOpen, setIsSocialAdsOpen] = useState<boolean>(false);
+  const [legalModalType, setLegalModalType] = useState<'privacy' | 'terms' | null>(null);
   const [firebaseUser, setFirebaseUser] = useState<User | null>(null);
 
   useEffect(() => {
@@ -86,10 +91,13 @@ export default function App() {
         />
       </main>
 
-      {/* Quiet Minimal Footer */}
+      {/* Quiet Minimal Footer with Legal & Tracking Links */}
       <Footer
         onOpenCrm={() => setIsCrmOpen(true)}
         onOpenQuote={() => setIsQuoteOpen(true)}
+        onOpenPrivacy={() => setLegalModalType('privacy')}
+        onOpenTerms={() => setLegalModalType('terms')}
+        onOpenSocialAds={() => setIsSocialAdsOpen(true)}
       />
 
       {/* Administrative CRM Dashboard with Google OAuth & Social Connections */}
@@ -127,6 +135,24 @@ export default function App() {
       <ExternalAgentsModal
         isOpen={isExternalAgentsOpen}
         onClose={() => setIsExternalAgentsOpen(false)}
+      />
+
+      {/* Central de Conexão de APIs de Tráfego Pago & Conformidade (Meta CAPI, Google, TikTok) */}
+      <SocialAdsComplianceModal
+        isOpen={isSocialAdsOpen}
+        onClose={() => setIsSocialAdsOpen(false)}
+      />
+
+      {/* Modais Legais (Privacidade & LGPD, Termos de Uso e Disclaimers Meta/Google) */}
+      <LegalModals
+        type={legalModalType}
+        onClose={() => setLegalModalType(null)}
+      />
+
+      {/* Banner de Consentimento LGPD & Google Consent Mode v2 */}
+      <CookieConsentBanner
+        onOpenPrivacy={() => setLegalModalType('privacy')}
+        onOpenTerms={() => setLegalModalType('terms')}
       />
     </div>
   );

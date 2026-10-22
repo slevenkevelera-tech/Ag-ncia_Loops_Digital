@@ -1,0 +1,40 @@
+{
+  "meta": {
+    "enabled": true,
+    "pixelId": "984210394820194",
+    "conversionsApiToken": "",
+    "testEventCode": "",
+    "domainVerification": "loopsdigital-meta-verification-2026",
+    "status": "ready"
+  },
+  "google": {
+    "enabled": true,
+    "measurementId": "G-LOOPSDIGITAL26",
+    "googleAdsConversionId": "AW-709984037",
+    "conversionLabel": "loops_lead_submission",
+    "enhancedConversions": true,
+    "status": "ready"
+  },
+  "tiktok": {
+    "enabled": true,
+    "pixelId": "C9K1234567890",
+    "eventsApiToken": "",
+    "status": "ready"
+  },
+  "linkedin": {
+    "enabled": true,
+    "partnerId": "7820194",
+    "status": "ready"
+  },
+  "whatsapp": {
+    "enabled": true,
+    "phoneNumberId": "104928109283019",
+    "status": "active"
+  },
+  "compliance": {
+    "consentModeV2": true,
+    "lgpdCompliant": true,
+    "sha256Hashing": true,
+    "serverSideDeduplication": true
+  }
+}
