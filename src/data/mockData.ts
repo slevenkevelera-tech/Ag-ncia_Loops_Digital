@@ -1,6 +1,7 @@
 import { ClientTestimonial, ProjectCaseStudy, SocialChannelConnection } from '../types';
+import founderOfficialPhoto from '../assets/images/lorenzo_cardoso_official.png';
 
-export const FOUNDER_IMAGE = '/src/assets/images/founder_authentic_photo_1790824371446.jpg';
+export const FOUNDER_IMAGE = founderOfficialPhoto;
 export const HERO_IMAGE = '/src/assets/images/hero_loops_digital_1790821146829.jpg';
 export const COP30_IMAGE = '/src/assets/images/cop30_telemetry_1790821156200.jpg';
 export const OMNICHANNEL_IMAGE = '/src/assets/images/omnichannel_ai_agents_1790821165700.jpg';

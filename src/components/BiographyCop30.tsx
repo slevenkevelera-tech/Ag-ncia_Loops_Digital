@@ -1,6 +1,7 @@
 import React from 'react';
 import { Award, Terminal, Code2, ShieldAlert, Cpu, Sparkles, MapPin, CheckCircle } from 'lucide-react';
-import { FOUNDER_IMAGE, COP30_IMAGE, PROJECT_CASES } from '../data/mockData';
+import { COP30_IMAGE, PROJECT_CASES } from '../data/mockData';
+import founderOfficialPhoto from '../assets/images/lorenzo_cardoso_official.png';
 
 export const BiographyCop30: React.FC = () => {
   return (
@@ -29,7 +30,7 @@ export const BiographyCop30: React.FC = () => {
             <div className="lg:col-span-5 relative">
               <div className="rounded-2xl overflow-hidden border border-white/10 aspect-[3/4] bg-neutral-950 shadow-2xl relative group">
                 <img
-                  src={FOUNDER_IMAGE}
+                  src={founderOfficialPhoto}
                   alt="Lorenzo Cardoso - Engenheiro Sênior & CTO Loops Digital"
                   className="w-full h-full object-cover object-center group-hover:scale-[1.02] transition-transform duration-500"
                   referrerPolicy="no-referrer"

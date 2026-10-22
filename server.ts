@@ -19,45 +19,6 @@ app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 // Serve local asset images statically in all environments (production & dev)
 app.use('/src/assets/images', express.static(path.resolve(process.cwd(), 'src/assets/images')));
 
-// Store uploaded founder photo in memory or on disk
-let customFounderPhoto: string | null = null;
-const customPhotoPath = path.resolve(process.cwd(), 'src/assets/images/custom_founder_uploaded.png');
-if (fs.existsSync(customPhotoPath)) {
-  try {
-    customFounderPhoto = `/src/assets/images/custom_founder_uploaded.png`;
-  } catch {}
-}
-
-app.get('/api/founder-photo', (req, res) => {
-  if (customFounderPhoto) {
-    return res.json({ photoUrl: customFounderPhoto });
-  }
-  return res.json({ photoUrl: null });
-});
-
-app.post('/api/upload-founder-photo', (req, res) => {
-  const { dataUrl } = req.body;
-  if (!dataUrl) {
-    return res.status(400).json({ error: 'Nenhuma imagem enviada' });
-  }
-
-  try {
-    const matches = dataUrl.match(/^data:image\/([A-Za-z-+\/]+);base64,(.+)$/);
-    if (matches && matches.length === 3) {
-      const buffer = Buffer.from(matches[2], 'base64');
-      fs.writeFileSync(customPhotoPath, buffer);
-      customFounderPhoto = `/src/assets/images/custom_founder_uploaded.png?t=${Date.now()}`;
-      return res.json({ success: true, photoUrl: customFounderPhoto });
-    } else {
-      customFounderPhoto = dataUrl;
-      return res.json({ success: true, photoUrl: dataUrl });
-    }
-  } catch (err: any) {
-    console.error('Error saving founder photo:', err);
-    res.status(500).json({ error: 'Erro ao salvar foto', details: err?.message });
-  }
-});
-
 // ==========================================
 // EXTERNAL AGENT SWARM GATEWAY & OAUTH ENDPOINTS
 // ==========================================
