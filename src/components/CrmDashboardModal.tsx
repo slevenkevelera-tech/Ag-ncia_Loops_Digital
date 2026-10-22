@@ -20,13 +20,16 @@ import {
   Lock,
   LogOut,
   ChevronRight,
-  Sparkles
+  Sparkles,
+  BarChart3,
 } from 'lucide-react';
 import { CrmLead, SocialChannelConnection } from '../types';
 import { INITIAL_CHANNELS } from '../data/mockData';
 import { auth, db, googleProvider, handleFirestoreError, OperationType } from '../lib/firebase';
 import { signInWithPopup, signOut, onAuthStateChanged, User } from 'firebase/auth';
 import { collection, onSnapshot, doc, setDoc, updateDoc } from 'firebase/firestore';
+import { AdminRestrictedGate } from './AdminRestrictedGate';
+import { PowerBiAnalyticsSection } from './PowerBiAnalyticsSection';
 
 interface CrmDashboardModalProps {
   isOpen: boolean;
@@ -39,7 +42,7 @@ export const CrmDashboardModal: React.FC<CrmDashboardModalProps> = ({
   isOpen,
   onClose,
 }) => {
-  const [activeTab, setActiveTab] = useState<'pipeline' | 'channels' | 'agent-config' | 'new-lead'>('pipeline');
+  const [activeTab, setActiveTab] = useState<'power-bi' | 'pipeline' | 'channels' | 'agent-config' | 'new-lead'>('power-bi');
   const [leads, setLeads] = useState<CrmLead[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [selectedLead, setSelectedLead] = useState<CrmLead | null>(null);
@@ -47,7 +50,12 @@ export const CrmDashboardModal: React.FC<CrmDashboardModalProps> = ({
   const [channelFilter, setChannelFilter] = useState<string>('all');
   const [channels, setChannels] = useState<SocialChannelConnection[]>(INITIAL_CHANNELS);
   const [firebaseUser, setFirebaseUser] = useState<User | null>(null);
+  const [isAdminSession, setIsAdminSession] = useState<boolean>(() => {
+    return localStorage.getItem('loops_admin_session_auth') === 'true';
+  });
   const [authLoading, setAuthLoading] = useState<boolean>(false);
+
+  const isAuthorizedAdmin = !!firebaseUser || isAdminSession;
 
   // Agent Settings State
   const [autoReplyEnabled, setAutoReplyEnabled] = useState<boolean>(true);
@@ -92,6 +100,10 @@ export const CrmDashboardModal: React.FC<CrmDashboardModalProps> = ({
     } catch (err) {
       console.error('Sign-out error:', err);
     }
+    localStorage.removeItem('loops_admin_session_auth');
+    localStorage.removeItem('loops_admin_role');
+    localStorage.removeItem('loops_admin_email');
+    setIsAdminSession(false);
   };
 
   const fetchLeads = async () => {
@@ -138,6 +150,18 @@ export const CrmDashboardModal: React.FC<CrmDashboardModalProps> = ({
   }, [isOpen, firebaseUser]);
 
   if (!isOpen) return null;
+
+  // Restricted Access Gate: Only authenticated administrators can access CRM & Power BI
+  if (!isAuthorizedAdmin) {
+    return (
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-black/85 backdrop-blur-xl animate-in fade-in">
+        <AdminRestrictedGate
+          onSuccess={() => setIsAdminSession(true)}
+          onClose={onClose}
+        />
+      </div>
+    );
+  }
 
   const handleUpdateLeadStatus = async (leadId: string, newStatus: CrmLead['status']) => {
     try {
@@ -366,6 +390,17 @@ export const CrmDashboardModal: React.FC<CrmDashboardModalProps> = ({
         <div className="px-6 py-3 border-b border-white/[0.06] bg-[#090d14] flex flex-wrap items-center justify-between gap-4">
           <div className="flex items-center gap-2">
             <button
+              onClick={() => setActiveTab('power-bi')}
+              className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-colors flex items-center gap-1.5 ${
+                activeTab === 'power-bi'
+                  ? 'bg-[#F2C811]/20 text-[#F2C811] border border-[#F2C811]/50 shadow-sm'
+                  : 'text-neutral-400 hover:text-white'
+              }`}
+            >
+              <BarChart3 className="w-3.5 h-3.5 text-[#F2C811]" />
+              <span>Analytics Power BI</span>
+            </button>
+            <button
               onClick={() => setActiveTab('pipeline')}
               className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-colors ${
                 activeTab === 'pipeline'
@@ -416,13 +451,21 @@ export const CrmDashboardModal: React.FC<CrmDashboardModalProps> = ({
             </div>
             <div>
               PIPELINE ESTIMADO:{' '}
-              <span className="text-emerald-400 font-bold">R$ 380.000</span>
+              <span className="text-emerald-400 font-bold">R$ 520.350</span>
             </div>
             <div>
               QUALIFICAÇÃO IA: <span className="text-cyan-400 font-bold">94.8%</span>
             </div>
           </div>
         </div>
+
+        {/* Tab 0: Power BI Executive Analytics */}
+        {activeTab === 'power-bi' && (
+          <PowerBiAnalyticsSection
+            leads={leads}
+            onOpenNewLead={() => setActiveTab('new-lead')}
+          />
+        )}
 
         {/* Tab 1: Pipeline / Kanban Board */}
         {activeTab === 'pipeline' && (
