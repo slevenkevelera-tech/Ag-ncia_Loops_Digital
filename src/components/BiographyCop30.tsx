@@ -1,90 +1,8 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { Award, Terminal, Code2, ShieldAlert, Cpu, Sparkles, MapPin, CheckCircle, Camera, UploadCloud, RotateCcw, Image as ImageIcon } from 'lucide-react';
+import React from 'react';
+import { Award, Terminal, Code2, ShieldAlert, Cpu, Sparkles, MapPin, CheckCircle } from 'lucide-react';
 import { FOUNDER_IMAGE, COP30_IMAGE, PROJECT_CASES } from '../data/mockData';
 
 export const BiographyCop30: React.FC = () => {
-  const [founderPhoto, setFounderPhoto] = useState<string>(() => {
-    return localStorage.getItem('loops_founder_custom_photo') || FOUNDER_IMAGE;
-  });
-  const [isCustom, setIsCustom] = useState<boolean>(() => {
-    return !!localStorage.getItem('loops_founder_custom_photo');
-  });
-  const [isDragging, setIsDragging] = useState<boolean>(false);
-  const fileInputRef = useRef<HTMLInputElement | null>(null);
-
-  useEffect(() => {
-    // Check if server already has custom uploaded photo
-    const checkServerPhoto = async () => {
-      try {
-        const res = await fetch('/api/founder-photo');
-        const data = await res.json();
-        if (data.photoUrl) {
-          setFounderPhoto(data.photoUrl);
-          setIsCustom(true);
-        }
-      } catch {}
-    };
-    if (!localStorage.getItem('loops_founder_custom_photo')) {
-      checkServerPhoto();
-    }
-  }, []);
-
-  const processFile = async (file: File) => {
-    const reader = new FileReader();
-    reader.onload = async (event) => {
-      const dataUrl = event.target?.result as string;
-      if (dataUrl) {
-        setFounderPhoto(dataUrl);
-        setIsCustom(true);
-        try {
-          localStorage.setItem('loops_founder_custom_photo', dataUrl);
-          // Sync to server storage
-          await fetch('/api/upload-founder-photo', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ dataUrl }),
-          });
-        } catch {}
-      }
-    };
-    reader.readAsDataURL(file);
-  };
-
-  const handlePhotoSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      processFile(file);
-    }
-  };
-
-  const handleDragOver = (e: React.DragEvent) => {
-    e.preventDefault();
-    setIsDragging(true);
-  };
-
-  const handleDragLeave = (e: React.DragEvent) => {
-    e.preventDefault();
-    setIsDragging(false);
-  };
-
-  const handleDrop = (e: React.DragEvent) => {
-    e.preventDefault();
-    setIsDragging(false);
-    const file = e.dataTransfer.files?.[0];
-    if (file && file.type.startsWith('image/')) {
-      processFile(file);
-    }
-  };
-
-  const handleResetPhoto = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    setFounderPhoto(FOUNDER_IMAGE);
-    setIsCustom(false);
-    try {
-      localStorage.removeItem('loops_founder_custom_photo');
-    } catch {}
-  };
-
   return (
     <section id="cop30-bio" className="py-24 border-t border-white/[0.06] bg-[#06080d]">
       <div className="max-w-7xl mx-auto px-6">
@@ -109,29 +27,9 @@ export const BiographyCop30: React.FC = () => {
           <div className="grid lg:grid-cols-12 gap-10 items-center">
             {/* Portrait Column */}
             <div className="lg:col-span-5 relative">
-              <input
-                ref={fileInputRef}
-                type="file"
-                accept="image/*"
-                onChange={handlePhotoSelect}
-                className="hidden"
-                id="founder-upload-input"
-              />
-
-              <div
-                onClick={() => fileInputRef.current?.click()}
-                onDragOver={handleDragOver}
-                onDragLeave={handleDragLeave}
-                onDrop={handleDrop}
-                className={`rounded-2xl overflow-hidden border transition-all duration-300 aspect-[3/4] bg-neutral-950 shadow-2xl relative group cursor-pointer ${
-                  isDragging
-                    ? 'border-cyan-400 scale-[1.02] shadow-[0_0_40px_rgba(6,182,212,0.4)]'
-                    : 'border-white/10 hover:border-cyan-500/50'
-                }`}
-                title="Clique ou arraste para colocar sua foto original exatamente como você é"
-              >
+              <div className="rounded-2xl overflow-hidden border border-white/10 aspect-[3/4] bg-neutral-950 shadow-2xl relative group">
                 <img
-                  src={founderPhoto}
+                  src={FOUNDER_IMAGE}
                   alt="Lorenzo Cardoso - Engenheiro Sênior & CTO Loops Digital"
                   className="w-full h-full object-cover object-center group-hover:scale-[1.02] transition-transform duration-500"
                   referrerPolicy="no-referrer"
@@ -140,22 +38,7 @@ export const BiographyCop30: React.FC = () => {
                 {/* Subtle scrim overlay */}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent pointer-events-none" />
 
-                {/* Dragging prompt overlay */}
-                {isDragging && (
-                  <div className="absolute inset-0 bg-cyan-950/80 backdrop-blur-md flex flex-col items-center justify-center p-6 text-center text-cyan-200 z-20">
-                    <UploadCloud className="w-12 h-12 text-cyan-400 animate-bounce mb-2" />
-                    <span className="text-sm font-bold">Solte sua foto aqui</span>
-                    <span className="text-xs font-mono text-cyan-300">Mantendo 100% de fidelidade e proporções</span>
-                  </div>
-                )}
-
-                {/* Quick Upload Indicator on hover */}
-                <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity bg-black/75 backdrop-blur-md px-3 py-1.5 rounded-lg border border-white/15 text-[11px] font-mono text-cyan-300 flex items-center gap-1.5 shadow-lg">
-                  <Camera className="w-3.5 h-3.5 text-cyan-400" />
-                  <span>{isCustom ? 'Substituir Foto' : 'Inserir Minha Foto'}</span>
-                </div>
-
-                {/* Bottom Profile Badge with Status */}
+                {/* Bottom Profile Badge */}
                 <div className="absolute bottom-4 left-4 right-4 p-3.5 rounded-xl bg-black/80 backdrop-blur-md border border-white/15 text-xs flex items-center justify-between shadow-2xl">
                   <div>
                     <div className="text-cyan-400 font-mono text-[11px] uppercase tracking-wider font-semibold">
@@ -163,43 +46,13 @@ export const BiographyCop30: React.FC = () => {
                     </div>
                     <div className="text-white font-extrabold text-base tracking-tight font-display mt-0.5 flex items-center gap-1.5">
                       <span>Lorenzo Cardoso</span>
-                      {isCustom && <CheckCircle className="w-3.5 h-3.5 text-emerald-400 inline" />}
+                      <CheckCircle className="w-3.5 h-3.5 text-cyan-400 inline" />
                     </div>
                   </div>
-
-                  {isCustom ? (
-                    <button
-                      onClick={handleResetPhoto}
-                      title="Restaurar padrão"
-                      className="p-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-neutral-400 hover:text-white transition-colors"
-                    >
-                      <RotateCcw className="w-3.5 h-3.5" />
-                    </button>
-                  ) : (
-                    <div className="text-[10px] font-mono text-neutral-400 flex items-center gap-1 bg-white/5 px-2 py-1 rounded">
-                      <UploadCloud className="w-3 h-3 text-cyan-400" />
-                      <span>Upload</span>
-                    </div>
-                  )}
+                  <div className="text-[10px] font-mono text-neutral-400 bg-white/5 px-2.5 py-1 rounded-full border border-white/10">
+                    Sócio-Fundador
+                  </div>
                 </div>
-              </div>
-
-              {/* Direct Action Link below photo */}
-              <div className="mt-3 p-2.5 rounded-xl bg-neutral-900/60 border border-white/5 flex items-center justify-between">
-                <button
-                  type="button"
-                  onClick={() => fileInputRef.current?.click()}
-                  className="text-xs font-mono text-cyan-400 hover:text-cyan-300 flex items-center gap-1.5 transition-colors font-medium"
-                >
-                  <Camera className="w-3.5 h-3.5" />
-                  <span>{isCustom ? 'Trocar por outro arquivo de imagem' : 'Colocar Minha Foto Oficial (Sem Alterações)'}</span>
-                </button>
-                {isCustom && (
-                  <span className="text-[10px] font-mono text-emerald-400 flex items-center gap-1">
-                    <CheckCircle className="w-3 h-3" />
-                    100% Original
-                  </span>
-                )}
               </div>
             </div>
 
