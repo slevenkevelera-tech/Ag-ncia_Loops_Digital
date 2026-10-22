@@ -114,7 +114,7 @@ export const Footer: React.FC<FooterProps> = ({ onOpenCrm, onOpenQuote }) => {
             <span aria-hidden="true">·</span>
             <span>Segurança Server-Side</span>
             <span aria-hidden="true">·</span>
-            <span>São Paulo / Belém, Brasil</span>
+            <span>Belém/Cametá - PA, Brasil</span>
           </div>
         </div>
       </div>

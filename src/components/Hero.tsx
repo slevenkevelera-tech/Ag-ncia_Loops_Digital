@@ -1,6 +1,7 @@
 import React from 'react';
 import { ArrowRight, Terminal, Cpu, Radio, Sparkles } from 'lucide-react';
 import { AiShowcaseCarousel } from './AiShowcaseCarousel';
+import { NeuralNetworkBackground } from './NeuralNetworkBackground';
 
 interface HeroProps {
   onOpenCrm: () => void;
@@ -10,6 +11,9 @@ interface HeroProps {
 export const Hero: React.FC<HeroProps> = ({ onOpenCrm, onOpenQuote }) => {
   return (
     <section className="relative pt-32 pb-20 md:pt-40 md:pb-28 overflow-hidden">
+      {/* Subtle ambient neural network animation */}
+      <NeuralNetworkBackground />
+
       {/* Subtle background ambient radial gradient */}
       <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[400px] bg-gradient-to-tr from-cyan-950/20 via-blue-900/10 to-transparent blur-[120px] pointer-events-none" />
 

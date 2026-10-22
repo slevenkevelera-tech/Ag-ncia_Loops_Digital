@@ -208,7 +208,7 @@ export const BiographyCop30: React.FC = () => {
               <div className="space-y-3">
                 <div className="text-xs font-mono text-neutral-400 flex items-center gap-2">
                   <MapPin className="w-3.5 h-3.5 text-cyan-400" />
-                  <span>São Paulo · Belém · Atuação Global</span>
+                  <span>Belém/Cametá - PA · Atuação Global</span>
                 </div>
                 <div className="space-y-1">
                   <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-xs font-mono text-cyan-300 font-semibold tracking-wider uppercase">

@@ -1,10 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { ChevronLeft, ChevronRight, Maximize2, Minimize2, Play, Pause, Cpu, ShieldCheck, Sparkles, Orbit, Radio, Zap } from 'lucide-react';
 import { BlackHoleSimulation } from './BlackHoleSimulation';
-import aiDatacenterImage from '../assets/images/ai_datacenter_cop30_1792581694517.jpg';
-import aiAgentsImage from '../assets/images/ai_autonomous_agents_1792581695351.jpg';
-import quantumNeuralImage from '../assets/images/ai_quantum_neural_synapse_1792581695238.jpg';
-import cosmicSingularityImage from '../assets/images/ai_cosmic_singularity_1792581695608.jpg';
 
 export interface CarouselSlide {
   id: string;
@@ -26,7 +22,7 @@ const SLIDES: CarouselSlide[] = [
     category: 'INFRAESTRUTURA VERDE & SUPERCOMPUTAÇÃO',
     title: 'Data Centers de IA Sustentáveis · Hub COP 30 Belém',
     subtitle: 'Arquiteturas de processamento hiper-escalar alimentadas por matrizes limpas, refrigeradas biometricamente para sustentar a próxima geração de modelos fundamentais na Amazônia.',
-    imageSrc: aiDatacenterImage,
+    imageSrc: '/src/assets/images/ai_datacenter_cop30_1792581694517.jpg',
     badge: 'COP 30 INFRASTRUCTURE',
     stats: [
       { label: 'EFICIÊNCIA PUE', value: '1.08 P99', accentColor: 'text-emerald-400' },
@@ -39,7 +35,7 @@ const SLIDES: CarouselSlide[] = [
     category: 'COCOGNIÇÃO HUMANO-MÁQUINA & AUTONOMIA',
     title: 'Agentes Autônomos Multimodais de Missão Crítica',
     subtitle: 'Sistemas que vão além de prompts passivos: agentes com raciocínio encadeado, tomada de decisão estratégica em tempo real e integração direta aos fluxos executivos das maiores empresas.',
-    imageSrc: aiAgentsImage,
+    imageSrc: '/src/assets/images/ai_autonomous_agents_1792581695351.jpg',
     badge: 'AUTONOMOUS REASONING',
     stats: [
       { label: 'TEMPO RESPOSTA', value: '< 800ms', accentColor: 'text-cyan-400' },
@@ -52,7 +48,7 @@ const SLIDES: CarouselSlide[] = [
     category: 'FRONTEIRA CIENTÍFICA & NEUROTECNOLOGIA',
     title: 'Redes Neurais Quânticas & Bio-Sinapses Sintéticas',
     subtitle: 'Mapeamento de manifolds multidimensionais e backpropagation acelerado, permitindo convergência de pesos em frações de segundo e compreensão semântica profunda.',
-    imageSrc: quantumNeuralImage,
+    imageSrc: '/src/assets/images/ai_quantum_neural_synapse_1792581695238.jpg',
     badge: 'QUANTUM SYNAPSE',
     stats: [
       { label: 'PARÂMETROS ATIVOS', value: '1.8 Trilhões', accentColor: 'text-purple-400' },
@@ -65,7 +61,7 @@ const SLIDES: CarouselSlide[] = [
     category: 'SINGULARIDADE & HORIZONTE DE EVENTOS',
     title: 'Singularidade Digital · Atração de Dados Relativística',
     subtitle: 'A convergência inevitável onde dados massivos, automação algorítmica e inteligência artificial formam um horizonte de eventos de produtividade e escala inatingíveis no modelo tradicional.',
-    imageSrc: cosmicSingularityImage,
+    imageSrc: '/src/assets/images/ai_cosmic_singularity_1792581695608.jpg',
     badge: 'EVENT HORIZON',
     stats: [
       { label: 'DENSIDADE DADOS', value: '100% Cobertura', accentColor: 'text-cyan-400' },

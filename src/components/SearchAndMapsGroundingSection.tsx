@@ -205,14 +205,14 @@ export const SearchAndMapsGroundingSection: React.FC = () => {
                   Geolocalização de Polos Técnicos & Sedes da COP 30.
                 </h3>
                 <p className="text-xs sm:text-sm text-neutral-300 leading-relaxed">
-                  O Google Maps Grounding permite contextualizar a presença territorial dos projetos da Loops, como o Hangar Centro de Convenções em Belém (Amazônia) e sedes corporativas em São Paulo.
+                  O Google Maps Grounding permite contextualizar a presença territorial dos projetos da Loops, como o Hangar Centro de Convenções em Belém (Amazônia) e sedes em Belém/Cametá - PA.
                 </p>
 
                 <div className="space-y-1.5 pt-2">
                   <div className="text-[11px] font-mono text-neutral-500">LOCAIS DESTACADOS:</div>
                   {[
                     'Hangar Centro de Convenções da Amazônia, Belém - PA (Sede COP 30)',
-                    'Avenida Brigadeiro Faria Lima, São Paulo - Polo Tech Loops',
+                    'Belém/Cametá - PA - Polo Tech & Inovação Loops',
                     'Parque de Ciência e Tecnologia do Guamá (PCT Guamá), Belém - PA',
                   ].map((loc, idx) => (
                     <button

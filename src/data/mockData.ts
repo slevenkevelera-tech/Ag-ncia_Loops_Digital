@@ -1,13 +1,9 @@
 import { ClientTestimonial, ProjectCaseStudy, SocialChannelConnection } from '../types';
-import founderImage from '../assets/images/founder_authentic_photo_1790824371446.jpg';
-import heroImage from '../assets/images/hero_loops_digital_1790821146829.jpg';
-import cop30Image from '../assets/images/cop30_telemetry_1790821156200.jpg';
-import omnichannelImage from '../assets/images/omnichannel_ai_agents_1790821165700.jpg';
 
-export const FOUNDER_IMAGE = founderImage;
-export const HERO_IMAGE = heroImage;
-export const COP30_IMAGE = cop30Image;
-export const OMNICHANNEL_IMAGE = omnichannelImage;
+export const FOUNDER_IMAGE = '/src/assets/images/founder_authentic_photo_1790824371446.jpg';
+export const HERO_IMAGE = '/src/assets/images/hero_loops_digital_1790821146829.jpg';
+export const COP30_IMAGE = '/src/assets/images/cop30_telemetry_1790821156200.jpg';
+export const OMNICHANNEL_IMAGE = '/src/assets/images/omnichannel_ai_agents_1790821165700.jpg';
 
 export const INITIAL_CHANNELS: SocialChannelConnection[] = [
   {

@@ -16,19 +16,17 @@ const server = http.createServer(app);
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 
+// Serve local asset images statically in all environments (production & dev)
+app.use('/src/assets/images', express.static(path.resolve(process.cwd(), 'src/assets/images')));
+
 // Store uploaded founder photo in memory or on disk
 let customFounderPhoto: string | null = null;
-const uploadsDir = path.resolve(process.cwd(), 'uploads');
-if (!fs.existsSync(uploadsDir)) {
-  fs.mkdirSync(uploadsDir, { recursive: true });
-}
-const customPhotoPath = path.resolve(uploadsDir, 'custom_founder_uploaded.png');
+const customPhotoPath = path.resolve(process.cwd(), 'src/assets/images/custom_founder_uploaded.png');
 if (fs.existsSync(customPhotoPath)) {
-  customFounderPhoto = `/uploads/custom_founder_uploaded.png`;
+  try {
+    customFounderPhoto = `/src/assets/images/custom_founder_uploaded.png`;
+  } catch {}
 }
-
-app.use('/uploads', express.static(uploadsDir));
-app.use('/src/assets', express.static(path.resolve(process.cwd(), 'src/assets')));
 
 app.get('/api/founder-photo', (req, res) => {
   if (customFounderPhoto) {
@@ -48,7 +46,7 @@ app.post('/api/upload-founder-photo', (req, res) => {
     if (matches && matches.length === 3) {
       const buffer = Buffer.from(matches[2], 'base64');
       fs.writeFileSync(customPhotoPath, buffer);
-      customFounderPhoto = `/uploads/custom_founder_uploaded.png?t=${Date.now()}`;
+      customFounderPhoto = `/src/assets/images/custom_founder_uploaded.png?t=${Date.now()}`;
       return res.json({ success: true, photoUrl: customFounderPhoto });
     } else {
       customFounderPhoto = dataUrl;
@@ -497,7 +495,7 @@ app.post('/api/gemini/maps-grounding', async (req, res) => {
   try {
     if (!ai) {
       return res.json({
-        text: `Localização consultada: "${locationQuery}". A Loops Digital atua em polos como Belém (Hangar Centro de Convenções da COP 30) e São Paulo (Faria Lima Tech District), com atendimento global remoto.`,
+        text: `Localização consultada: "${locationQuery}". A Loops Digital atua em polos como Belém (Hangar Centro de Convenções da COP 30) e Belém/Cametá - PA, com atendimento global remoto.`,
         places: [{ name: locationQuery, address: 'Brasil' }],
       });
     }
